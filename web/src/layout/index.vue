@@ -32,4 +32,8 @@ export default {
   .el-aside{
     height: calc(100vh);
   }
+  .el-header{
+    display: flex;
+    align-items: center;
+  }
 </style>
