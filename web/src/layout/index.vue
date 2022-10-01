@@ -1,12 +1,12 @@
 <template>
   <el-container>
-    <el-header>
-      <Header></Header>
-    </el-header>
+    <el-aside width="250px">
+      <Aside></Aside>
+    </el-aside>
     <el-container>
-      <el-aside>
-        <Aside></Aside>
-      </el-aside>
+      <el-header>
+        <Header></Header>
+      </el-header>
       <el-main>
         <Main></Main>
       </el-main>
@@ -29,5 +29,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .el-aside{
+    height: calc(100vh);
+  }
 </style>

@@ -45,25 +45,6 @@ public class SysMenuController extends ResultUtil {
     }
 
     /**
-    * @Description: 获取左侧菜单树
-    * @Param: []
-    * @return: org.springframework.http.ResponseEntity<java.lang.Object>
-    * @Author: starao
-    * @Date: 2022/3/20
-    */
-    @Log("获取左侧菜单树")
-    @GetMapping("/menu/tree/left")
-    public ResponseEntity<Object> getMenuTreeForLeft(){
-        try {
-            List<String> roles = SecurityUtil.getCurrentRoles();
-            return success(true, menuService.getMenuTreeForLeft(roles));
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            return fail(false, e.getMsg());
-        }
-    }
-
-    /**
     * @Description: 查询当前用户所有权限菜单
     * @Param: []
     * @return: org.springframework.http.ResponseEntity<java.lang.Object>
@@ -93,24 +74,6 @@ public class SysMenuController extends ResultUtil {
     public ResponseEntity<Object> getMenuTable(String blurry){
         try {
             return success(true, menuService.getMenuTable(blurry));
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            return fail(false, e.getMsg());
-        }
-    }
-
-    /**
-    * @Description: 获取下拉框里面的树
-    * @Param: [type]
-    * @return: org.springframework.http.ResponseEntity<java.lang.Object>
-    * @Author: starao
-    * @Date: 2021/11/27
-    */
-    @Log("获取下拉框里面的树")
-    @GetMapping("/menu/select/tree")
-    public ResponseEntity<Object> getMenuSelectTree(String type){
-        try {
-            return success(true, menuService.getMenuSelectTree(type));
         } catch (BadRequestException e) {
             e.printStackTrace();
             return fail(false, e.getMsg());
@@ -149,24 +112,6 @@ public class SysMenuController extends ResultUtil {
         try {
             menuService.delMenu(id);
             return success(true, "删除成功");
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            return fail(false, e.getMsg());
-        }
-    }
-
-    /**
-    * @Description: 获取角色菜单树
-    * @Param: [roleId]
-    * @return: org.springframework.http.ResponseEntity<java.lang.Object>
-    * @Author: starao
-    * @Date: 2021/11/27
-    */
-    @Log("获取角色菜单树")
-    @GetMapping("/menu/role/tree")
-    public ResponseEntity<Object> getMenuTreeByRoleId(String roleId){
-        try {
-            return success(true, menuService.getMenuTreeByRoleId(roleId));
         } catch (BadRequestException e) {
             e.printStackTrace();
             return fail(false, e.getMsg());

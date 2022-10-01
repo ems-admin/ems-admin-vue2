@@ -31,8 +31,8 @@ export default {
         password: ''
       },
       rules: {
-        username: [{require: true, message: '用户名不能为空', trigger: 'blur'}],
-        password: [{require: true, message: '密码不能为空', trigger: 'blur'}]
+        username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -44,6 +44,10 @@ export default {
             if (res.success){
               //  缓存token
               store.dispatch('tokenAction', res.data.token)
+              //  缓存当前登录用户信息
+              store.dispatch('userInfoAction', res.data.userDto)
+              //  切换到首页
+              this.$router.replace({path: '/Layout'})
             } else {
               errorMsg(res.msg)
             }

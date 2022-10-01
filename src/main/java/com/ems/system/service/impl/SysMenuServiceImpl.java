@@ -47,9 +47,12 @@ public class SysMenuServiceImpl implements SysMenuService {
     public JSONArray getMenuTree(List<String> roles) {
         try {
             List<SysMenu> menuListAll;
-            //  如果角色中包含admin,则直接查询所有菜单
+            //  如果角色中包含admin,则直接查询所有非按钮菜单
             if (roles.contains(CommonConstants.ROLE_ADMIN)){
-                menuListAll = menuMapper.selectList(null);
+                LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
+                wrapper.ne(SysMenu::getType, "3");
+                wrapper.orderByAsc(SysMenu::getSort);
+                menuListAll = menuMapper.selectList(wrapper);
             } else {
                 menuListAll = menuMapper.getMenuTree(roles);
                 if (!CollectionUtils.isEmpty(menuListAll)){
@@ -60,7 +63,23 @@ public class SysMenuServiceImpl implements SysMenuService {
                     menuListAll = new ArrayList<>(menuSet).stream().sorted(Comparator.comparing(SysMenu::getId)).collect(Collectors.toList());
                 }
             }
-            return getObjects(menuListAll, 0l, "title", null);
+            JSONArray jsonArray = new JSONArray();
+            //  获取最上级菜单
+            List<SysMenu> topList = menuListAll.stream().filter(item -> item.getParentId() == 0L).collect(Collectors.toList());
+            //  如果最上级菜单不为空
+            if (!CollectionUtils.isEmpty(topList)){
+                //  组装菜单树
+                for (SysMenu sysMenu : topList) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", sysMenu.getId());
+                    jsonObject.put("name", sysMenu.getName());
+                    jsonObject.put("path", sysMenu.getPath());
+                    jsonObject.put("children", getChildById(menuListAll, sysMenu.getId()));
+
+                    jsonArray.add(jsonObject);
+                }
+            }
+            return jsonArray;
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());
@@ -68,36 +87,27 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
-     * @param type
-     * @Description: 获取下拉框里面的树
-     * @Param: [type]
-     * @return: com.alibaba.fastjson.JSONArray
-     * @Author: starao
-     * @Date: 2021/11/27
-     */
-    @Override
-    public JSONArray getMenuSelectTree(String type) {
-        try {
-            QueryWrapper<SysMenu> wrapper = new QueryWrapper<>();
-            if (StringUtils.isNotBlank(type)){
-                wrapper.eq("type", type);
+    * @Description: 通过ID获取子菜单
+    * @Param: [menuList, parentId]
+    * @return: com.alibaba.fastjson.JSONArray
+    * @Author: starao
+    * @Date: 2022/10/1
+    */
+    private JSONArray getChildById(List<SysMenu> menuList, long parentId){
+        JSONArray jsonArray = new JSONArray();
+        List<SysMenu> children = menuList.stream().filter(item -> item.getParentId().equals(parentId)).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(children)){
+            for (SysMenu sysMenu : children) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", sysMenu.getId());
+                jsonObject.put("name", sysMenu.getName());
+                jsonObject.put("path", sysMenu.getPath());
+                jsonObject.put("children", getChildById(menuList, sysMenu.getId()));
+
+                jsonArray.add(jsonObject);
             }
-            List<SysMenu> menuList = menuMapper.selectList(wrapper);
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", "0");
-            jsonObject.put("name", "顶级目录");
-            jsonObject.put("open", true);
-            jsonObject.put("checked", false);
-            if (!getObjects(menuList, 0l,  "name", null).isEmpty()){
-                jsonObject.put("children", getObjects(menuList, 0l,  "name", null));
-            }
-            jsonArray.add(0, jsonObject);
-            return jsonArray;
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            throw new BadRequestException(e.getMsg());
         }
+        return jsonArray;
     }
 
     /**
@@ -136,28 +146,6 @@ public class SysMenuServiceImpl implements SysMenuService {
             //  校验菜单是否已绑定角色
             checkMenuRole(id);
             menuMapper.deleteById(id);
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            throw new BadRequestException(e.getMsg());
-        }
-    }
-
-    /**
-     * @param roleId
-     * @Description: 获取角色菜单树
-     * @Param: [roleId]
-     * @return: com.alibaba.fastjson.JSONArray
-     * @Author: starao
-     * @Date: 2021/11/27
-     */
-    @Override
-    public JSONArray getMenuTreeByRoleId(String roleId) {
-        try {
-            //  当前角色菜单
-            List<String> menuList = menuMapper.getMenuTreeByRoleId(roleId);
-            //  所有菜单
-            List<SysMenu> allMenuList = menuMapper.selectList(null);
-            return getObjects(allMenuList, 0l, "title", menuList);
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());
@@ -204,7 +192,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
             wrapper.orderByAsc(SysMenu::getSort);
             List<SysMenu> list = menuMapper.selectList(wrapper);
-            return getObjects(list, 0l, "title", null);
+            return null;
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());
@@ -223,113 +211,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<String> getUrlsByRoles(List<String> roles) {
         try {
             return menuMapper.getMenuUrlByRole(roles);
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            throw new BadRequestException(e.getMsg());
-        }
-    }
-
-    /**
-     * @param roles
-     * @Description: 获取左侧菜单树
-     * @Param: [roles]
-     * @return: com.alibaba.fastjson.JSONArray
-     * @Author: starao
-     * @Date: 2022/3/20
-     */
-    @Override
-    public JSONArray getMenuTreeForLeft(List<String> roles) {
-        //  如果是系统管理员，则直接获取所有菜单
-        List<SysMenu> menuList = new ArrayList<>();
-        if (roles.contains(CommonConstants.ROLE_ADMIN)){
-            LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
-            //  菜单
-            wrapper.eq(SysMenu::getType, "1");
-            wrapper.or();
-            //  页面
-            wrapper.eq(SysMenu::getType, "2");
-            wrapper.orderByAsc(SysMenu::getSort);
-            menuList = menuMapper.selectList(wrapper);
-        }
-        JSONArray jsonArray = new JSONArray();
-        if (!CollectionUtils.isEmpty(menuList)){
-            List<SysMenu> topMenuList = menuList.stream().filter(sysMenu -> sysMenu.getParentId() == 0L).collect(Collectors.toList());
-            for (SysMenu sysMenu : topMenuList) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", sysMenu.getId());
-                jsonObject.put("path", sysMenu.getPath());
-                jsonObject.put("name", sysMenu.getName());
-                jsonObject.put("type", sysMenu.getType());
-                if (!CollectionUtils.isEmpty(getChildMenu(menuList, sysMenu.getId(), "left", null))){
-                    jsonObject.put("children", getChildMenu(menuList, sysMenu.getId(), "left", null));
-                }
-                jsonArray.add(jsonObject);
-            }
-        }
-        return jsonArray;
-    }
-
-    /**
-    * @Description: 获取子菜单
-    * @Param: [menuListAll, id, title, menuIds]
-    * @return: com.alibaba.fastjson.JSONArray
-    * @Author: starao
-    * @Date: 2021/11/27
-    */
-    public JSONArray getChildMenu(List<SysMenu> menuListAll, Long id, String title, List<String> menuIds){
-        try {
-            return getObjects(menuListAll, id, title, menuIds);
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            throw new BadRequestException(e.getMsg());
-        }
-    }
-
-    /**
-    * @Description: 组装树的公共方法
-    * @Param: [menuListAll, id, title, menuIds]
-    * @return: com.alibaba.fastjson.JSONArray
-    * @Author: starao
-    * @Date: 2021/11/27
-    */
-    private JSONArray getObjects(List<SysMenu> menuListAll, Long id, String title, List<String> menuIds) {
-        try {
-            //  获取子菜单(不包含按钮)
-            List<SysMenu> childList = menuListAll.stream().filter(menu ->
-                    menu.getParentId().longValue() == id.longValue() && !"3".equals(menu.getType())).collect(Collectors.toList());
-            //  组装树
-            JSONArray jsonArray = new JSONArray();
-            childList.forEach(menu -> {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", menu.getId());
-                jsonObject.put(title, menu.getName());
-                if ("title".equals(title)){
-                    jsonObject.put("parentId", menu.getParentId());
-                    jsonObject.put("path", menu.getPath());
-                    jsonObject.put("name", menu.getName());
-                    jsonObject.put("type", menu.getType());
-                    jsonObject.put("sort", menu.getSort());
-                    jsonObject.put("component", menu.getComponent());
-                    jsonObject.put("permission", menu.getPermission());
-                    if (!CollectionUtils.isEmpty(menuIds) && menuIds.contains(menu.getId().toString())){
-                        jsonObject.put("checked", true);
-                    }
-                } else if ("name".equals(title)){
-                    jsonObject.put("open", false);
-                    jsonObject.put("checked", false);
-                } else if ("left".equals(title)){
-                    jsonObject.put("name", menu.getName());
-                    jsonObject.put("path", menu.getPath());
-                    jsonObject.put("type", menu.getType());
-                }
-                if (menuListAll.stream().anyMatch(menu1 -> menu1.getParentId().longValue() == id.longValue())) {
-                    if (!getChildMenu(menuListAll, menu.getId(), title, menuIds).isEmpty()){
-                        jsonObject.put("children", getChildMenu(menuListAll, menu.getId(), title, menuIds));
-                    }
-                }
-                jsonArray.add(jsonObject);
-            });
-            return jsonArray;
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());

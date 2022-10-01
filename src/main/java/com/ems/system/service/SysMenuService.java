@@ -23,15 +23,6 @@ public interface SysMenuService {
     JSONArray getMenuTree(List<String> roles);
 
     /**
-    * @Description: 获取下拉框里面的树
-    * @Param: [type]
-    * @return: com.alibaba.fastjson.JSONArray
-    * @Author: starao
-    * @Date: 2021/11/27
-    */
-    JSONArray getMenuSelectTree(String type);
-
-    /**
     * @Description: 编辑菜单
     * @Param: [sysMenu]
     * @return: void
@@ -48,15 +39,6 @@ public interface SysMenuService {
     * @Date: 2021/11/27
     */
     void delMenu(Long id);
-
-    /**
-    * @Description: 获取角色菜单树
-    * @Param: [roleId]
-    * @return: com.alibaba.fastjson.JSONArray
-    * @Author: starao
-    * @Date: 2021/11/27
-    */
-    JSONArray getMenuTreeByRoleId(String roleId);
 
     /**
     * @Description: 查询当前用户所有权限菜单
@@ -84,13 +66,4 @@ public interface SysMenuService {
     * @Date: 2022/1/19
     */
     List<String> getUrlsByRoles(List<String> currentRoles);
-
-    /**
-    * @Description: 获取左侧菜单树
-    * @Param: [roles]
-    * @return: com.alibaba.fastjson.JSONArray
-    * @Author: starao
-    * @Date: 2022/3/20
-    */
-    JSONArray getMenuTreeForLeft(List<String> roles);
 }

@@ -15,7 +15,7 @@ instance.interceptors.request.use(
         //  如果已登录
         if (store.state.token){
             //  在请求头添加token
-            config.headers['Authorization'] = 'Bearer' + store.state.token
+            config.headers['Authorization'] = 'Bearer ' + store.state.token
         }
         //  统一请求类型json
         config.headers['Content-Type'] = 'application/json'
@@ -34,6 +34,7 @@ instance.interceptors.response.use(
     },
     error => {
         //  请求返回码
+        console.info(error.response)
         const code = error.response.status
         //  请求返回错误
         const data = error.response.data

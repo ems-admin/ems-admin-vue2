@@ -1,6 +1,6 @@
 import router from "./routers";
 import store from "../store";
-import {queryAllMenu} from "../api/sysMenu/menu";
+import {queryAllMenu} from "../api/menu/sysMenu";
 import {errorMsg} from "../utils/message";
 
 //  定义路由白名单
@@ -95,14 +95,14 @@ export function addRoute(){
     let routers = store.state.routers
     if (routers && routers.length > 0){
         console.info(routers)
-        // routers.forEach(item => {
-        //     // if (item.path){
-        //     //     router.addRoute('Layout', {
-        //     //         path: item.path,
-        //     //         name: item.name,
-        //     //         component: item.component !== null ? () => import(`@views/${item.component}`) : null
-        //     //     })
-        //     // }
-        // })
+        routers.forEach(item => {
+            if (item.path){
+                router.addRoute('Layout', {
+                    path: item.path,
+                    name: item.name,
+                    component: item.component != null ? () => import(`@/views/${item.component}`) : null
+                })
+            }
+        })
     }
 }

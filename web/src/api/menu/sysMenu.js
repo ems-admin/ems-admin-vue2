@@ -10,3 +10,14 @@ export function queryAllMenu(){
         method: 'get'
     })
 }
+
+/**
+ * 获取当前登录用户菜单树
+ * @returns {AxiosPromise}
+ */
+export function getMenuTree(){
+    return request({
+        url: '/sys/menu/tree',
+        method: 'get'
+    })
+}
