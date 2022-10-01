@@ -1,0 +1,19 @@
+.login{
+    height: calc(100vh);
+    background-image: url("../image/background.jpg");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form{
+    width: 400px;
+    height: 300px;
+    text-align: center;
+    background: white;
+    padding: 50px;
+}
+
+.button{
+    width: 100%;
+}

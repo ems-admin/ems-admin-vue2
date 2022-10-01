@@ -18,6 +18,10 @@ const store = new Vuex.Store({
         //  缓存用户菜单列表
         routerMutation(state, payload){
             state.routers = payload
+        },
+        //  缓存用户token
+        tokenMutation(state, payload){
+            state.token = payload
         }
     },
     actions: {
@@ -28,6 +32,10 @@ const store = new Vuex.Store({
         //  缓存用户菜单列表
         routerAction(context, data){
             context.commit('routerMutation', data)
+        },
+        //  缓存用户token
+        tokenAction(context, data){
+            context.commit('tokenMutation', data)
         }
     },
     plugins: [createPersistedState({storage: sessionStorage})]
