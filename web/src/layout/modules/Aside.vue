@@ -2,7 +2,8 @@
   <el-menu :default-active="defaultActive" :unique-opened="true" router
            background-color="#545c64" text-color="#fff" class="el-menu-vertical-demo">
     <div class="logo">
-      <el-image :src="require('../../assets/image/logo.png')" style="width: 60px;"></el-image>
+      <el-image :src="require('../../assets/image/ems.png')" style="width: 40px;"></el-image>
+      <span>EMS-ADMIN</span>
     </div>
     <!--默认将首页放在第一位-->
     <el-menu-item route="/home" index="首页">首页</el-menu-item>
@@ -59,8 +60,8 @@ export default {
     },
     //  打开页面
     openTab(name, path){
-      console.info(name)
-      console.info(path)
+      //  将当前打开的菜单添加到已打开列表中
+      store.dispatch('addTabAction', {name: name, path: path})
       //  将激活菜单改成选中的菜单
       store.dispatch('activeIndexAction', name)
     }
@@ -71,5 +72,13 @@ export default {
 <style scoped>
   .el-menu{
     height: 100%;
+  }
+  .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    height: 60px;
   }
 </style>

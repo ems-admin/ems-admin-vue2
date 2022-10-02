@@ -48,4 +48,7 @@ export default {
     display: flex;
     align-items: center;
   }
+  .el-main{
+    padding: 0;
+  }
 </style>
