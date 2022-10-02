@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col span="12">
+    <el-col :span="12">
       <span>EMS后台管理系统</span>
     </el-col>
-    <el-col span="12">
+    <el-col :span="12">
       <el-dropdown>
         <span class="el-dropdown-link">{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
         <el-dropdown-menu slot="dropdown">

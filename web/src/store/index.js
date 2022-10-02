@@ -14,7 +14,9 @@ const store = new Vuex.Store({
         //  所有菜单（系统+用户动态授权）
         routers: null,
         //  当前激活菜单
-        activeIndex: '首页'
+        activeIndex: '首页',
+        //  所有已打开的菜单
+        openTabs: []
     },
     mutations: {
         //  是否拉取用户菜单
@@ -36,6 +38,22 @@ const store = new Vuex.Store({
         //  当前激活菜单
         activeMutation(state, payload){
             state.activeIndex = payload
+        },
+        //  添加已打开的菜单
+        addTabMutation(state, payload){
+            //  如果不存在才添加
+            if (state.openTabs.filter(tab => tab.name === payload.name).length === 0){
+                payload.isClose = payload.name !== '首页'
+                state.openTabs.push(payload)
+            }
+        },
+        //  关闭已打开的菜单
+        removeTabMutation(state, payload){
+            state.openTabs = state.openTabs.filter((tab) => tab.name !== payload)
+        },
+        //  清空所有tabs
+        clearTabsMutation(state){
+            state.openTabs = []
         }
     },
     actions: {
@@ -58,6 +76,18 @@ const store = new Vuex.Store({
         //  当前激活菜单
         activeIndexAction(context, data){
             context.commit('activeMutation', data)
+        },
+        //  添加已打开的菜单
+        addTabAction(context, data){
+            context.commit('addTabMutation', data)
+        },
+        //  关闭已打开的菜单
+        removeTabAction(context, data){
+            context.commit('removeTabMutation', data)
+        },
+        //  清空所有tabs
+        clearTabAction(context, data){
+            context.commit('clearTabsMutation', data)
         }
 
     },

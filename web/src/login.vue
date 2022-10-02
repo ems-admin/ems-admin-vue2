@@ -18,6 +18,7 @@
 <script>
 import './assets/css/login.css'
 import store from "./store";
+import routers from "./router/routers";
 import {login} from "./api/login/login";
 import {errorMsg} from "./utils/message";
 export default {
@@ -47,7 +48,7 @@ export default {
               //  缓存当前登录用户信息
               store.dispatch('userInfoAction', res.data.userDto)
               //  切换到首页
-              this.$router.replace({path: '/Layout'})
+              routers.push({path: '/Layout'})
             } else {
               errorMsg(res.msg)
             }
