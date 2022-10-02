@@ -21,3 +21,16 @@ export function getMenuTree(){
         method: 'get'
     })
 }
+
+/**
+ * 获取菜单列表
+ * @param params
+ * @returns {AxiosPromise}
+ */
+export function getMenuTable(params){
+    return request({
+        url: '/sys/menu/table',
+        method: 'get',
+        params
+    })
+}

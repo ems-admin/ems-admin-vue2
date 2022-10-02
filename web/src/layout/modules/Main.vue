@@ -63,6 +63,8 @@ export default {
 <style scoped>
 ::v-deep .el-tabs__content{
   height: calc(100vh - 120px);
+  padding-left: 30px;
+  padding-right: 30px;
 }
 ::v-deep  .el-tabs__nav-wrap{
   height: 40px;

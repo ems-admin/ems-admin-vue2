@@ -5,6 +5,8 @@ import App from './App.vue'
 import router from "./router/routers";
 import store from "./store";
 
+import './assets/css/public.css'
+
 import './utils/message'
 import './router/index'
 

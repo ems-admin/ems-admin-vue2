@@ -67,23 +67,38 @@ public class SysMenuServiceImpl implements SysMenuService {
             //  获取最上级菜单
             List<SysMenu> topList = menuListAll.stream().filter(item -> item.getParentId() == 0L).collect(Collectors.toList());
             //  如果最上级菜单不为空
-            if (!CollectionUtils.isEmpty(topList)){
-                //  组装菜单树
-                for (SysMenu sysMenu : topList) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("id", sysMenu.getId());
-                    jsonObject.put("name", sysMenu.getName());
-                    jsonObject.put("path", sysMenu.getPath());
-                    jsonObject.put("children", getChildById(menuListAll, sysMenu.getId()));
-
-                    jsonArray.add(jsonObject);
-                }
-            }
-            return jsonArray;
+            return getObjects(menuListAll, jsonArray, topList);
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());
         }
+    }
+
+    /**
+    * @Description: 组装树的公共方法
+    * @Param: [menuListAll, jsonArray, topList]
+    * @return: com.alibaba.fastjson.JSONArray
+    * @Author: starao
+    * @Date: 2022/10/2
+    */
+    private JSONArray getObjects(List<SysMenu> menuListAll, JSONArray jsonArray, List<SysMenu> topList) {
+        if (!CollectionUtils.isEmpty(topList)){
+            //  组装菜单树
+            for (SysMenu sysMenu : topList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", sysMenu.getId());
+                jsonObject.put("name", sysMenu.getName());
+                jsonObject.put("path", sysMenu.getPath());
+                jsonObject.put("sort", sysMenu.getSort());
+                jsonObject.put("component", sysMenu.getComponent());
+                jsonObject.put("permission", sysMenu.getPermission());
+                jsonObject.put("type", sysMenu.getType());
+                jsonObject.put("children", getChildById(menuListAll, sysMenu.getId()));
+
+                jsonArray.add(jsonObject);
+            }
+        }
+        return jsonArray;
     }
 
     /**
@@ -96,18 +111,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     private JSONArray getChildById(List<SysMenu> menuList, long parentId){
         JSONArray jsonArray = new JSONArray();
         List<SysMenu> children = menuList.stream().filter(item -> item.getParentId().equals(parentId)).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(children)){
-            for (SysMenu sysMenu : children) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", sysMenu.getId());
-                jsonObject.put("name", sysMenu.getName());
-                jsonObject.put("path", sysMenu.getPath());
-                jsonObject.put("children", getChildById(menuList, sysMenu.getId()));
-
-                jsonArray.add(jsonObject);
-            }
-        }
-        return jsonArray;
+        return getObjects(menuList, jsonArray, children);
     }
 
     /**
@@ -184,6 +188,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     public JSONArray getMenuTable(String blurry) {
         try {
+            JSONArray jsonArray = new JSONArray();
             LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
             if (StringUtil.isNotBlank(blurry)){
                 wrapper.like(SysMenu::getName, blurry);
@@ -192,7 +197,8 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
             wrapper.orderByAsc(SysMenu::getSort);
             List<SysMenu> list = menuMapper.selectList(wrapper);
-            return null;
+            List<SysMenu> topList = list.stream().filter(item -> item.getParentId() == 0L).collect(Collectors.toList());
+            return getObjects(list, jsonArray, topList);
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());
