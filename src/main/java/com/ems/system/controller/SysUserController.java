@@ -4,6 +4,7 @@ import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.ResultUtil;
 import com.ems.logs.annotation.Log;
 import com.ems.system.entity.SysUser;
+import com.ems.system.entity.dto.QueryDto;
 import com.ems.system.entity.dto.UserDto;
 import com.ems.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class SysUserController extends ResultUtil {
     */
     @Log("查询用户列表")
     @GetMapping("/user/table")
-    public ResponseEntity<Object> queryUserTable(String blurry){
+    public ResponseEntity<Object> queryUserTable(QueryDto queryDto){
         try {
-            return success(true, userService.queryUserTable(blurry));
+            return success(true, userService.queryUserTable(queryDto));
         } catch (BadRequestException e) {
             e.printStackTrace();
             return fail(false, e.getMsg());

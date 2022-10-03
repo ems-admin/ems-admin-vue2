@@ -2,10 +2,13 @@ package com.ems.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ems.common.constant.CommonConstants;
 import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.StringUtil;
 import com.ems.system.entity.SysUser;
+import com.ems.system.entity.dto.QueryDto;
 import com.ems.system.entity.dto.UserDto;
 import com.ems.system.mapper.SysUserMapper;
 import com.ems.system.service.SysRoleUserService;
@@ -94,7 +97,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * @param blurry
+     * @param queryDto
      * @Description: 查询用户列表
      * @Param: [blurry]
      * @return: java.util.List<com.ems.system.entity.SysUser>
@@ -102,9 +105,12 @@ public class SysUserServiceImpl implements SysUserService {
      * @Date: 2021/11/27
      */
     @Override
-    public List<UserDto> queryUserTable(String blurry) {
+    public IPage<UserDto> queryUserTable(QueryDto queryDto) {
         try {
-            return sysUserMapper.queryUserTable(blurry);
+            Page<UserDto> page = new Page<>();
+            page.setCurrent(queryDto.getCurrentPage());
+            page.setSize(queryDto.getSize());
+            return sysUserMapper.queryUserTable(page, queryDto.getBlurry());
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());

@@ -1,6 +1,8 @@
 package com.ems.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ems.system.entity.SysUser;
+import com.ems.system.entity.dto.QueryDto;
 import com.ems.system.entity.dto.UserDto;
 
 import java.util.List;
@@ -33,12 +35,12 @@ public interface SysUserService {
 
     /**
     * @Description: 查询用户列表
-    * @Param: [blurry]
+    * @Param: [queryDto]
     * @return: java.util.List<com.ems.system.entity.SysUser>
     * @Author: starao
     * @Date: 2021/11/27
     */
-    List<UserDto> queryUserTable(String blurry);
+    IPage<UserDto> queryUserTable(QueryDto queryDto);
 
     /**
     * @Description: 根据用户名查询用户
