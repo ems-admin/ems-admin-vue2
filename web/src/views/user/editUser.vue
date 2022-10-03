@@ -69,7 +69,7 @@ export default {
       if (this.userObj.id){
         this.getRoleList()
         this.title = '编辑'
-        this.userForm = JSON.parse(JSON.stringify(this.userObj))
+        this.userForm = this.userObj
         this.userForm.roleIds = this.userForm.roleIds[0].split(',')
         //  将roleIds中的字符串数字转化为数字
         this.userForm.roleIds = this.userForm.roleIds.map(Number)

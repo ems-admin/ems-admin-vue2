@@ -17,8 +17,8 @@
       </el-table-column>
       <el-table-column label="操作" prop="option" width="220px" align="center">
         <template slot-scope="scope">
-          <el-button type="warning" @click="enabledUser(scope.row.id, !scope.row.enabled)">{{scope.row.enabled ? '停用' : '启用'}}</el-button>
-          <el-button type="primary" @click="editUser(scope.row)">编辑</el-button>
+          <el-button type="warning" @click="enabledUser(JSON.parse(JSON.stringify(scope.row)))">{{scope.row.enabled ? '停用' : '启用'}}</el-button>
+          <el-button type="primary" @click="editUser(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
           <el-button type="danger" @click="delUser(scope.row.id, scope.row.username)">删除</el-button>
         </template>
       </el-table-column>
@@ -29,7 +29,7 @@
 
 <script>
 import editUser from "./editUser";
-import {getUserList, delUser} from "../../api/user/sysUser";
+import {getUserList, delUser, enabledUser} from "../../api/user/sysUser";
 import {errorMsg, infoMsg, successMsg} from "../../utils/message";
 export default {
   name: "index",
@@ -78,9 +78,27 @@ export default {
       })
     },
     //  启用/停用用户
-    enabledUser(id, enabled){
-      console.info(id)
-      console.info(enabled)
+    enabledUser(row){
+      row.enabled = !row.enabled
+      const str = row.enabled ? '启用' : '停用'
+      const color = row.enabled ? '#67C23A' : '#F56C6C'
+      this.$confirm('确定<span style="color: '+color+'">' + str + '</span>用户【' + row.nickName + '】？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        enabledUser(row).then(res => {
+          if (res.success){
+            successMsg(res.data)
+            this.getUserList()
+          } else {
+            errorMsg(res.msg)
+          }
+        })
+      }).catch(() => {
+        infoMsg('操作已取消')
+      })
     }
   }
 }

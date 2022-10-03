@@ -38,3 +38,16 @@ export function delUser(params){
         params
     })
 }
+
+/**
+ * 启用/停用用户
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function enabledUser(data){
+    return request({
+        url: '/sys/user/enabled',
+        method: 'put',
+        data
+    })
+}
