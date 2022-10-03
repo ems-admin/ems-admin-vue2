@@ -51,3 +51,16 @@ export function delRole(params){
         params
     })
 }
+
+/**
+ * 获取角色已授权菜单
+ * @param params
+ * @returns {AxiosPromise}
+ */
+export function getMenusByRoleId(params){
+    return request({
+        url: '/sys/role/menu/list',
+        method: 'get',
+        params
+    })
+}

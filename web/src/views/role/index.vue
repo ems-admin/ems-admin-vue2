@@ -19,23 +19,28 @@
       </el-table-column>
     </el-table>
     <edit-role :dialog-visible.sync="dialogVisible" :role-obj="roleObj" @get-list="getRoleList"></edit-role>
+    <authorize-role :auth-visible.sync="authVisible" :role-id="roleId"></authorize-role>
   </div>
 </template>
 
 <script>
 import editRole from "./editRole";
+import authorizeRole from "./authorizeRole";
 import {getRoleList, delRole} from "../../api/role/sysRole";
 import {errorMsg, infoMsg, successMsg} from "../../utils/message";
 export default {
   name: "index",
   components: {
-    editRole
+    editRole,
+    authorizeRole
   },
   data(){
     return{
       blurry: '',
       tableData: [],
       dialogVisible: false,
+      authVisible: false,
+      roleId: null,
       roleObj: {},
 
     }
@@ -60,8 +65,9 @@ export default {
       this.roleObj = row.id ? row : {}
     },
     //  角色授权
-    authorizeRole(){
-
+    authorizeRole(id){
+      this.authVisible = true
+      this.roleId = id
     },
     //  删除角色
     delRole(id, name){
