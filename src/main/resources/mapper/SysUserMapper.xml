@@ -5,8 +5,8 @@
   <resultMap id="roles" type="java.lang.String">
       <result column="roles" property="roles" jdbcType="VARCHAR"></result>
   </resultMap>
-    <resultMap id="roleIds" type="java.lang.Long">
-      <result column="roleIds" property="roleIds" jdbcType="BIGINT"></result>
+    <resultMap id="roleIds" type="java.lang.String">
+      <result column="roleIds" property="roleIds" jdbcType="VARCHAR"></result>
   </resultMap>
 
   <resultMap id="userResult" type="com.ems.system.entity.dto.UserDto">
@@ -36,7 +36,7 @@
             t1.enabled,
             t1.nick_name AS nickName,
             t1.username,
-            GROUP_CONCAT( t3.role_code SEPARATOR ',' ) AS roles,
+            GROUP_CONCAT( t3.role_name SEPARATOR ',' ) AS roles,
             GROUP_CONCAT( t3.id SEPARATOR ',' ) AS roleIds
         FROM
             sys_user t1

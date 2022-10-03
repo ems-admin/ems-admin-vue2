@@ -87,8 +87,8 @@ public class SysUserServiceImpl implements SysUserService {
             }
 
             //  如果带有角色,就修改角色
-            if (!CollectionUtils.isEmpty(userDto.getRoles()) && user.getId() != null){
-                roleUserService.edit(user.getId(), userDto.getRoles());
+            if (!CollectionUtils.isEmpty(userDto.getRoleIds()) && user.getId() != null){
+                roleUserService.edit(user.getId(), userDto.getRoleIds());
             }
         } catch (BadRequestException e) {
             e.printStackTrace();

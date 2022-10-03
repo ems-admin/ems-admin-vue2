@@ -1,63 +1,39 @@
 <template>
   <el-dialog :title="title" :visible.sync="visible" :close-on-click-modal="false" @opened="openFun">
-    <el-form :model="menuForm" :rules="rules" ref="menuRef" label-width="120px">
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="上级目录" prop="parentId">
-            <treeselect v-model="menuForm.parentId" :options="options" :clearable="false" :normalizer="normalizer"></treeselect>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="排序" prop="sort">
-            <el-input v-model="menuForm.sort" placeholder="请输入排序" clearable></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-form-item label="菜单类型" prop="type">
-        <el-radio-group v-model="menuForm.type">
-          <el-radio :label="'1'">菜单</el-radio>
-          <el-radio :label="'2'">页面</el-radio>
-          <el-radio :label="'3'">按钮</el-radio>
-        </el-radio-group>
+    <el-form :model="userForm" :rules="rules" ref="userRef" label-width="120px">
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="userForm.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="菜单名称" prop="name">
-        <el-input v-model="menuForm.name" placeholder="请输入菜单名称"></el-input>
+      <el-form-item label="昵称" prop="nickName">
+        <el-input v-model="userForm.nickName" placeholder="请输入昵称"></el-input>
       </el-form-item>
-      <el-form-item v-if="menuForm.type === '2' || menuForm.type === '3'" label="访问路径" prop="path">
-        <el-input v-model="menuForm.path" placeholder="请输入菜单路径"></el-input>
-      </el-form-item>
-      <el-form-item v-if="menuForm.type === '2'" label="组件路径" prop="component">
-        <el-input v-model="menuForm.component" placeholder="请输入页面component"></el-input>
-      </el-form-item>
-      <el-form-item v-if="menuForm.type === '3'" label="按钮权限" prop="permission">
-        <el-input v-model="menuForm.permission" placeholder="请输入权限"></el-input>
+      <el-form-item label="用户角色" prop="roleIds">
+        <el-select v-model="userForm.roleIds" multiple placeholder="请选择角色">
+          <el-option v-for="(item, index) in roleList" :key="index" :label="item.roleName" :value="parseInt(item.id)"></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <span slot="footer">
-      <el-button @click="resetForm('menuRef')">重置</el-button>
-      <el-button type="primary" @click="submitMenu('menuRef')">确定</el-button>
+      <el-button @click="resetForm('userRef')">重置</el-button>
+      <el-button type="primary" @click="submitUser('userRef')">确定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import {getMenuTree, editMenu} from "../../api/menu/sysMenu";
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import {editUser} from "../../api/user/sysUser";
+import {getRoleList} from "../../api/role/sysRole";
 import {errorMsg, successMsg} from "../../utils/message";
 import {resetForm} from "../../utils/common";
 export default {
-  name: "editMenu",
-  components: {
-    Treeselect
-  },
+  name: "editUser",
   props: {
     dialogVisible: {
       type: Boolean,
       require: true,
       default: false
     },
-    menuObj: Object
+    userObj: Object
   },
   computed: {
     visible: {
@@ -73,63 +49,47 @@ export default {
     return{
       title: '新增',
       isLoading: false,
-      menuForm: {
+      userForm: {
         id: null,
-        parentId: 0,
-        name: '',
-        path: '',
-        component: '',
-        permission: '',
-        type: '1'
+        username: '',
+        nickName: '',
+        roleIds: []
       },
       rules: {
-        parentId: [{required: true, message: '上级菜单不能为空', trigger: 'change'}],
-        sort: [{required: true, message: '排序不能为空', trigger: 'blur'}],
-        name: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
-        path: [{required: true, message: '菜单路径不能为空', trigger: 'blur'}],
-        component: [{required: true, message: '组件路径不能为空', trigger: 'blur'}],
-        permission: [{required: true, message: '权限不能为空', trigger: 'blur'}],
+        username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
+        nickName: [{required: true, message: '用户昵称不能为空', trigger: 'blur'}],
+        roleIds: [{required: true, message: '用户角色不能为空', trigger: 'change'}]
       },
-      options: [
-        {
-          id: 0,
-          name: '顶级目录',
-          children: []
-        }
-      ],
-      normalizer(node) {
-        return{
-          id: node.id,
-          label: node.name,
-          children: node.children
-        }
-      }
+      roleList: []
     }
   },
   methods: {
     resetForm,
     openFun(){
-      if (this.menuObj.id){
+      if (this.userObj.id){
+        this.getRoleList()
         this.title = '编辑'
-        this.menuForm = JSON.parse(JSON.stringify(this.menuObj))
+        this.userForm = JSON.parse(JSON.stringify(this.userObj))
+        this.userForm.roleIds = this.userForm.roleIds[0].split(',')
+        //  将roleIds中的字符串数字转化为数字
+        this.userForm.roleIds = this.userForm.roleIds.map(Number)
       }
-      this.getMenuTree()
     },
-    //  获取下拉菜单树
-    getMenuTree() {
-      getMenuTree().then(res => {
+    //  获取角色列表
+    getRoleList() {
+      getRoleList({}).then(res => {
         if (res.success){
-          this.options[0].children = res.data
+          this.roleList = res.data
         } else {
           errorMsg(res.msg)
         }
       })
     },
     //  提交
-    submitMenu(formName){
+    submitUser(formName){
       this.$refs[formName].validate((valid) => {
         if (valid){
-          editMenu(this.menuForm).then(res => {
+          editUser(this.userForm).then(res => {
             if (res.success){
               successMsg(res.data)
               this.visible = false

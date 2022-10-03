@@ -46,7 +46,7 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
 
     /**
      * @param userId
-     * @param roles
+     * @param roleIds
      * @Description: 修改用户角色
      * @Param: [userId, roles]
      * @return: void
@@ -55,14 +55,14 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
      */
     @Override
     @Transactional
-    public void edit(Long userId, List<String> roles) {
+    public void edit(Long userId, List<String> roleIds) {
         try {
             //  首先清空该用户所有角色
             QueryWrapper<SysRoleUser> wrapper = new QueryWrapper<>();
             wrapper.eq("user_id", userId);
             roleUserMapper.delete(wrapper);
             //  然后将用户与角色绑定
-            roles.forEach(role -> {
+            roleIds.forEach(role -> {
                 SysRoleUser roleUser = new SysRoleUser();
                 roleUser.setUserId(userId);
                 roleUser.setRoleId(Long.parseLong(role));

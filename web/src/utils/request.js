@@ -34,7 +34,6 @@ instance.interceptors.response.use(
     },
     error => {
         //  请求返回码
-        console.info(error.response)
         const code = error.response.status
         //  请求返回错误
         const data = error.response.data

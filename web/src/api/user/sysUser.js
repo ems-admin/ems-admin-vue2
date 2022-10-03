@@ -14,6 +14,19 @@ export function getUserList(params){
 }
 
 /**
+ * 编辑用户
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function editUser(data){
+    return request({
+        url: '/sys/user/edit',
+        method: 'post',
+        data
+    })
+}
+
+/**
  * 删除用户
  * @param params
  * @returns {AxiosPromise}

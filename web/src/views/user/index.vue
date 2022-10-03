@@ -41,7 +41,7 @@ export default {
       blurry: '',
       tableData: [],
       dialogVisible: false,
-      userObj: {}
+      userObj: null
     }
   },
   mounted() {

@@ -23,12 +23,12 @@ public interface SysRoleUserService {
 
     /**
     * @Description: 修改用户角色
-    * @Param: [userId, roles]
+    * @Param: [userId, roleIds]
     * @return: void
     * @Author: starao
     * @Date: 2021/11/27
     */
-    void edit(Long userId, List<String> roles);
+    void edit(Long userId, List<String> roleIds);
 
     /**
     * @Description: 查询当前用户角色
