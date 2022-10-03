@@ -1,0 +1,91 @@
+<template>
+  <div>
+    <div class="searchDiv">
+      <el-input class="searchInput" v-model="blurry" placeholder="请输入角色名称或代码" clearable></el-input>
+      <el-button type="primary" @click="getRoleList">查询</el-button>
+      <el-button @click="editRole" style="float: right;">新增</el-button>
+    </div>
+    <el-table :data="tableData" row-key="id" border>
+      <el-table-column label="序号" type="index" width="60"></el-table-column>
+      <el-table-column label="角色名称" prop="roleName"></el-table-column>
+      <el-table-column label="角色代码" prop="roleCode"></el-table-column>
+      <el-table-column label="角色说明" prop="description"></el-table-column>
+      <el-table-column label="操作" prop="option" width="220px" align="center">
+        <template slot-scope="scope">
+          <el-button type="success" @click="authorizeRole(scope.row.id)">授权</el-button>
+          <el-button type="primary" @click="editRole(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
+          <el-button type="danger" @click="delRole(scope.row.id, scope.row.roleName)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <edit-role :dialog-visible.sync="dialogVisible" :role-obj="roleObj" @get-list="getRoleList"></edit-role>
+  </div>
+</template>
+
+<script>
+import editRole from "./editRole";
+import {getRoleList, delRole} from "../../api/role/sysRole";
+import {errorMsg, infoMsg, successMsg} from "../../utils/message";
+export default {
+  name: "index",
+  components: {
+    editRole
+  },
+  data(){
+    return{
+      blurry: '',
+      tableData: [],
+      dialogVisible: false,
+      roleObj: {},
+
+    }
+  },
+  mounted() {
+    this.getRoleList()
+  },
+  methods: {
+    //  获取角色列表
+    getRoleList(){
+      getRoleList({blurry: this.blurry}).then(res => {
+        if (res.success){
+          this.tableData = res.data
+        } else {
+          errorMsg(res.msg)
+        }
+      })
+    },
+    //  编辑角色
+    editRole(row){
+      this.dialogVisible = true
+      this.roleObj = row.id ? row : {}
+    },
+    //  角色授权
+    authorizeRole(){
+
+    },
+    //  删除角色
+    delRole(id, name){
+      this.$confirm('确定删除角色【'+name+'】？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delRole({id: id}).then(res => {
+          if (res.success){
+            successMsg(res.data)
+            this.getRoleList()
+          } else {
+            errorMsg(res.msg)
+          }
+        })
+      }).catch(() => {
+        infoMsg('操作已取消')
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

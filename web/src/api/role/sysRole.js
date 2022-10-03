@@ -12,3 +12,42 @@ export function getRoleList(params){
         params
     })
 }
+
+/**
+ * 编辑角色
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function editRole(data){
+    return request({
+        url: '/sys/role/edit',
+        method: 'post',
+        data
+    })
+}
+
+/**
+ * 角色授权
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function authorizeRole(data){
+    return request({
+        url: '/sys/role/menu/edit',
+        method: 'post',
+        data
+    })
+}
+
+/**
+ * 删除角色
+ * @param params
+ * @returns {AxiosPromise}
+ */
+export function delRole(params){
+    return request({
+        url: '/sys/role/del',
+        method: 'delete',
+        params
+    })
+}

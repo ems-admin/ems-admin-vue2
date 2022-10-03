@@ -111,7 +111,7 @@ export default {
     openFun(){
       if (this.menuObj.id){
         this.title = '编辑'
-        this.menuForm = JSON.parse(JSON.stringify(this.menuObj))
+        this.menuForm = this.menuObj
       }
       this.getMenuTree()
     },

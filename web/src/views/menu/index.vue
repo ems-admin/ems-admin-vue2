@@ -20,7 +20,7 @@
       <el-table-column label="排序" prop="sort"></el-table-column>
       <el-table-column label="操作" prop="option" width="150px" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="editMenu(scope.row)">编辑</el-button>
+          <el-button type="primary" @click="editMenu(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
           <el-button type="danger" @click="delMenu(scope.row.id, scope.row.name)">删除</el-button>
         </template>
       </el-table-column>
@@ -63,7 +63,7 @@ export default {
     //  编辑菜单
     editMenu(row){
       this.dialogVisible = true
-      this.menuObj = row
+      this.menuObj = row.id ? row : {}
     },
     //  删除菜单
     delMenu(id, name){

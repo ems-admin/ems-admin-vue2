@@ -41,7 +41,7 @@ export default {
       blurry: '',
       tableData: [],
       dialogVisible: false,
-      userObj: null
+      userObj: {}
     }
   },
   mounted() {
@@ -57,7 +57,7 @@ export default {
     },
     editUser(row){
       this.dialogVisible = true
-      this.userObj = row
+      this.userObj = row.id ? row : {}
     },
     delUser(id, username){
       this.$confirm('确定删除用户【' + username + '】？', '提示', {
