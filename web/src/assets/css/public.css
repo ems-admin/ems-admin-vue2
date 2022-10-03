@@ -6,8 +6,8 @@
 }
 /*table*/
 .el-table{
-    height: calc(100vh - 130px);
-    max-height: calc(100vh - 130px);
+    height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
     font-size: 12px;
 }
 .el-table .el-table__cell{
@@ -18,6 +18,10 @@
     font-size: 12px;
 }
 .el-input__inner{
+    height: 28px;
+    line-height: 28px;
+}
+.el-input__clear{
     height: 28px;
     line-height: 28px;
 }
@@ -36,4 +40,13 @@
 
 .el-dialog__footer{
     text-align: center;
+}
+
+/*search*/
+.searchDiv{
+    padding-bottom: 15px;
+}
+.searchInput{
+    width: 200px;
+    margin-right: 10px;
 }

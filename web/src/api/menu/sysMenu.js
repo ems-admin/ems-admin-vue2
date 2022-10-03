@@ -47,3 +47,16 @@ export function editMenu(data){
         data
     })
 }
+
+/**
+ * 根据ID删除菜单
+ * @param params
+ * @returns {AxiosPromise}
+ */
+export function delMenu(params){
+    return request({
+        url: '/sys/menu/del',
+        method: 'delete',
+        params
+    })
+}

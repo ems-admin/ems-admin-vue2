@@ -4,12 +4,12 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="上级目录" prop="parentId">
-            <treeselect v-model="menuForm.parentId" :options="options" :normalizer="normalizer"></treeselect>
+            <treeselect v-model="menuForm.parentId" :options="options" :clearable="false" :normalizer="normalizer"></treeselect>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="排序" prop="sort">
-            <el-input v-model="menuForm.sort" placeholder="请输入排序"></el-input>
+            <el-input v-model="menuForm.sort" placeholder="请输入排序" clearable></el-input>
           </el-form-item>
         </el-col>
       </el-row>

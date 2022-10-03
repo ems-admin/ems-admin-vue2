@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="searchDiv">
+      <el-input class="searchInput" v-model="blurry" placeholder="请输入菜单名称或路径" clearable></el-input>
+      <el-button type="primary" @click="getMenuList">查询</el-button>
+      <el-button @click="editMenu" style="float: right;">新增</el-button>
+    </div>
     <el-table :data="tableData" row-key="id" border>
       <el-table-column label="菜单名称" prop="name"></el-table-column>
       <el-table-column label="菜单路径" prop="path"></el-table-column>
@@ -25,8 +30,8 @@
 </template>
 
 <script>
-import {getMenuTable} from "../../api/menu/sysMenu";
-import {errorMsg} from "../../utils/message";
+import {getMenuTable, delMenu} from "../../api/menu/sysMenu";
+import {errorMsg, infoMsg, successMsg} from "../../utils/message";
 import editMenu from "./editMenu";
 export default {
   name: "index",
@@ -62,8 +67,22 @@ export default {
     },
     //  删除菜单
     delMenu(id, name){
-      console.info(id)
-      console.info(name)
+      this.$confirm('确定删除菜单【'+ name + '】？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delMenu({id: id}).then(res => {
+          if (res.success){
+            successMsg(res.data)
+            this.getMenuList()
+          } else {
+            errorMsg(res.msg)
+          }
+        })
+      }).catch(() => {
+        infoMsg('操作已取消')
+      })
     }
   }
 }
