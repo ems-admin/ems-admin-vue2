@@ -87,13 +87,16 @@ public class SysMenuServiceImpl implements SysMenuService {
             for (SysMenu sysMenu : topList) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", sysMenu.getId());
+                jsonObject.put("parentId", sysMenu.getParentId());
                 jsonObject.put("name", sysMenu.getName());
                 jsonObject.put("path", sysMenu.getPath());
                 jsonObject.put("sort", sysMenu.getSort());
                 jsonObject.put("component", sysMenu.getComponent());
                 jsonObject.put("permission", sysMenu.getPermission());
                 jsonObject.put("type", sysMenu.getType());
-                jsonObject.put("children", getChildById(menuListAll, sysMenu.getId()));
+                if (!CollectionUtils.isEmpty(getChildById(menuListAll, sysMenu.getId()))){
+                    jsonObject.put("children", getChildById(menuListAll, sysMenu.getId()));
+                }
 
                 jsonArray.add(jsonObject);
             }
