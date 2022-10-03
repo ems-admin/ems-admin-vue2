@@ -9,6 +9,7 @@ import './assets/css/public.css'
 
 import './utils/message'
 import './router/index'
+import './utils/common'
 
 Vue.config.productionTip = false
 

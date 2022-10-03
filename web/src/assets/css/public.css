@@ -1,15 +1,39 @@
+/*button*/
 .el-button{
     font-size: 12px;
     padding: 7px 15px;
     border-radius: 3px;
 }
-
+/*table*/
 .el-table{
     height: calc(100vh - 130px);
     max-height: calc(100vh - 130px);
     font-size: 12px;
 }
-
 .el-table .el-table__cell{
     padding: 6px 0;
+}
+/*input*/
+.el-input{
+    font-size: 12px;
+}
+.el-input__inner{
+    height: 28px;
+    line-height: 28px;
+}
+.el-form-item__label{
+    font-size: 12px;
+    height: 28px;
+    line-height: 28px;
+}
+/*dialog*/
+.el-dialog__body{
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 50px;
+}
+
+.el-dialog__footer{
+    text-align: center;
 }

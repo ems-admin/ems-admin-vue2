@@ -34,3 +34,16 @@ export function getMenuTable(params){
         params
     })
 }
+
+/**
+ * 编辑菜单
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function editMenu(data){
+    return request({
+        url: '/sys/menu/edit',
+        method: 'post',
+        data
+    })
+}
