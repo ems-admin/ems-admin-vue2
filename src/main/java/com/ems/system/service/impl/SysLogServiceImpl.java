@@ -9,7 +9,7 @@ import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.StringUtil;
 import com.ems.logs.annotation.Log;
 import com.ems.system.entity.SysLog;
-import com.ems.system.entity.dto.LogDto;
+import com.ems.system.entity.dto.QueryDto;
 import com.ems.system.mapper.SysLogMapper;
 import com.ems.system.service.SysLogService;
 import lombok.RequiredArgsConstructor;
@@ -95,30 +95,29 @@ public class SysLogServiceImpl implements SysLogService {
     }
 
     /**
-     * @param logDto
+     * @param queryDto
+     * @param logType
      * @Description: 查询日志列表
-     * @Param: [logDto]
+     * @Param: [queryDto, logType]
      * @return: com.baomidou.mybatisplus.core.metadata.IPage<com.ems.system.entity.SysLog>
      * @Author: starao
      * @Date: 2021/11/27
      */
     @Override
-    public IPage<SysLog> getLogList(LogDto logDto) {
+    public IPage<SysLog> getLogList(QueryDto queryDto, String logType) {
         try {
             LambdaQueryWrapper<SysLog> wrapper = new LambdaQueryWrapper<>();
             wrapper.orderByDesc(SysLog::getCreateTime);
-            if (StringUtil.isNotBlank(logDto.getUsername())){
-                wrapper.like(SysLog::getUsername, logDto.getUsername());
+            if (StringUtil.isNotBlank(logType)){
+                wrapper.eq(SysLog::getLogType, logType);
             }
-            if (StringUtil.isNotBlank(logDto.getDescription())){
-                wrapper.like(SysLog::getDescription, logDto.getDescription());
-            }
-            if (StringUtil.isNotBlank(logDto.getLogType())){
-                wrapper.eq(SysLog::getLogType, logDto.getLogType());
+            if (StringUtil.isNotBlank(queryDto.getBlurry())){
+                wrapper.and(q -> q.like(SysLog::getUsername, queryDto.getBlurry())
+                        .or().like(SysLog::getDescription, queryDto.getBlurry()));
             }
             Page<SysLog> page = new Page<>();
-            page.setSize(logDto.getSize());
-            page.setCurrent(logDto.getCurrent());
+            page.setSize(queryDto.getSize());
+            page.setCurrent(queryDto.getCurrentPage());
             return logMapper.selectPage(page, wrapper);
         } catch (BadRequestException e) {
             e.printStackTrace();

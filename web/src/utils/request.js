@@ -33,34 +33,43 @@ instance.interceptors.response.use(
         return response.data
     },
     error => {
-        //  请求返回码
-        const code = error.response.status
-        //  请求返回错误
-        const data = error.response.data
-        if (code){
-            //  如果是未授权
-            if (code === 401){
-                //  同时存在异常信息
-                if (data){
-                    //  显示错误信息
-                    errorMsg(data.detail)
-                //  否则跳转至401页面
-                } else {
-                    routers.replace({path: '/401'})
-                }
-            //  如果是没有权限
-            } else if (code === 403){
-                //  直接跳转至401页面
-                routers.replace({path: '/401'})
-            //  如果是服务器异常或其他异常
-            } else {
-                //  如果存在异常信息，显示异常信息
-                if (data){
-                    errorMsg(data.detail)
-                }
-            }
+        console.info('错误信息')
+        console.info(error)
+        if (error.name === 'AxiosError'){
+            errorMsg(error.message)
         } else {
-            errorMsg('接口请求失败')
+            //  请求返回码
+            let code;
+            if (error.response){
+                code = error.response.status
+            }
+            //  请求返回错误
+            const data = error.response.data
+            if (code){
+                //  如果是未授权
+                if (code === 401){
+                    //  同时存在异常信息
+                    if (data){
+                        //  显示错误信息
+                        errorMsg(data.detail)
+                        //  否则跳转至401页面
+                    } else {
+                        routers.replace({path: '/401'})
+                    }
+                    //  如果是没有权限
+                } else if (code === 403){
+                    //  直接跳转至401页面
+                    routers.replace({path: '/401'})
+                    //  如果是服务器异常或其他异常
+                } else {
+                    //  如果存在异常信息，显示异常信息
+                    if (data){
+                        errorMsg(data.detail)
+                    }
+                }
+            } else {
+                errorMsg('接口请求失败')
+            }
         }
         return Promise.reject(error)
     }
