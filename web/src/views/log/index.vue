@@ -18,12 +18,28 @@
       <el-table-column label="操作说明" prop="description" show-overflow-tooltip></el-table-column>
       <el-table-column label="请求方法" prop="method" show-overflow-tooltip></el-table-column>
       <el-table-column label="请求参数" prop="params" show-overflow-tooltip></el-table-column>
-      <el-table-column label="IP" prop="ip"></el-table-column>
-      <el-table-column label="日志类型" prop="logType"></el-table-column>
-      <el-table-column label="请求耗时" prop="time"></el-table-column>
-      <el-table-column label="错误详情" prop="exceptionDetail" show-overflow-tooltip></el-table-column>
+      <el-table-column label="IP" prop="ip" width="120"></el-table-column>
+      <el-table-column label="日志类型" prop="logType" width="100">
+        <template slot-scope="scope">
+          <span>{{scope.row.logType === '1' ? '成功' : '失败'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="错误详情" prop="exceptionDetail" show-tooltip-when-overflow>
+        <!--将错误的长度显示限制在100，防止内容过长，引起由于show-tooltip-when-overflow自带BUG产生页面的抖动-->
+        <template slot-scope="scope">
+          <span>{{scope.row.exceptionDetail ? scope.row.exceptionDetail.substring(0, 100) : ''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="请求耗时" prop="time" width="100"></el-table-column>
+      <el-table-column label="操作" prop="option" width="120" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="showErrorDetails(scope.row.exceptionDetail)">错误详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
+    <!--    分页-->
     <pagination :current.sync="current" :size.sync="size" :total="total" @get-list="getLogs"></pagination>
+    <error-detail :dialog-visible.sync="dialogVisible" :msg="msg"></error-detail>
   </div>
 </template>
 
@@ -31,14 +47,18 @@
 import {getLogList} from "../../api/log/sysLog";
 import {errorMsg} from "../../utils/message";
 import Pagination from "../../components/Pagination";
+import ErrorDetail from "./ErrorDetail";
 export default {
   name: "index",
   components: {
-    Pagination
+    Pagination,
+    ErrorDetail
   },
   data(){
     return{
       blurry: '',
+      dialogVisible: false,
+      msg: null,
       tableData: [],
       logType: '',
       current: 1,
@@ -54,7 +74,8 @@ export default {
       const params = {
         blurry: this.blurry,
         currentPage: this.current,
-        size: this.size
+        size: this.size,
+        logType: this.logType
       }
       getLogList(params).then(res => {
         if (res.success){
@@ -64,11 +85,18 @@ export default {
           errorMsg(res.msg)
         }
       })
+    },
+    //  显示错误信息详情
+    showErrorDetails(msg){
+      this.dialogVisible = true
+      this.msg = msg
     }
   }
 }
 </script>
 
 <style scoped>
-
+.el-tooltip__popper{
+  margin-left: 20px;
+}
 </style>
