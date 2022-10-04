@@ -23,17 +23,22 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页-->
+    <pagination :current.sync="current" :size.sync="size" :total="total" @get-list="getUserList"></pagination>
+    <!--编辑-->
     <edit-user :dialog-visible.sync="dialogVisible" :user-obj="userObj" @get-list="getUserList"></edit-user>
   </div>
 </template>
 
 <script>
 import editUser from "./editUser";
+import Pagination from "../../components/Pagination";
 import {getUserList, delUser, enabledUser} from "../../api/user/sysUser";
 import {errorMsg, infoMsg, successMsg} from "../../utils/message";
 export default {
   name: "index",
   components: {
+    Pagination,
     editUser
   },
   data(){
@@ -41,7 +46,10 @@ export default {
       blurry: '',
       tableData: [],
       dialogVisible: false,
-      userObj: {}
+      userObj: {},
+      current: 1,
+      size: 10,
+      total: 0
     }
   },
   mounted() {
@@ -52,6 +60,7 @@ export default {
       getUserList({blurry: this.blurry}).then(res => {
         if (res.success){
           this.tableData = res.data.records
+          this.total = res.data.total
         }
       })
     },

@@ -5,7 +5,7 @@
       <el-button type="primary" @click="getRoleList">查询</el-button>
       <el-button @click="editRole" style="float: right;">新增</el-button>
     </div>
-    <el-table :data="tableData" row-key="id" border>
+    <el-table :data="tableData" row-key="id" border height="calc(100vh - 180px)" max-height="calc(100vh - 180px)">
       <el-table-column label="序号" type="index" width="60"></el-table-column>
       <el-table-column label="角色名称" prop="roleName"></el-table-column>
       <el-table-column label="角色代码" prop="roleCode"></el-table-column>
@@ -18,7 +18,9 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--编辑-->
     <edit-role :dialog-visible.sync="dialogVisible" :role-obj="roleObj" @get-list="getRoleList"></edit-role>
+    <!--授权-->
     <authorize-role :auth-visible.sync="authVisible" :role-id="roleId"></authorize-role>
   </div>
 </template>
@@ -42,7 +44,6 @@ export default {
       authVisible: false,
       roleId: null,
       roleObj: {},
-
     }
   },
   mounted() {

@@ -5,7 +5,7 @@
       <el-button type="primary" @click="getMenuList">查询</el-button>
       <el-button @click="editMenu" style="float: right;">新增</el-button>
     </div>
-    <el-table :data="tableData" row-key="id" border>
+    <el-table :data="tableData" row-key="id" border height="calc(100vh - 180px)" max-height="calc(100vh - 180px)">
       <el-table-column label="菜单名称" prop="name"></el-table-column>
       <el-table-column label="菜单路径" prop="path"></el-table-column>
       <el-table-column label="component" prop="component"></el-table-column>
