@@ -33,9 +33,7 @@ instance.interceptors.response.use(
         return response.data
     },
     error => {
-        console.info('错误信息')
-        console.info(error)
-        if (error.name === 'AxiosError'){
+        if (!error.response){
             errorMsg(error.message)
         } else {
             //  请求返回码

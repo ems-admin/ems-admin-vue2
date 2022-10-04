@@ -4,7 +4,7 @@ import {queryAllMenu} from "../api/menu/sysMenu";
 import {errorMsg} from "../utils/message";
 
 //  定义路由白名单
-const whiteList = ['/login']
+const whiteList = ['/login', '/401', '/404']
 
 //  创建路由守卫
 router.beforeEach((to, from, next) => {
@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
                         next(to.fullPath)
                         //  不存在就跳转到404页面
                     } else {
-                        // next({path: '/404'})
+                        next({path: '/404'})
                     }
                 //  否则
                 } else {
