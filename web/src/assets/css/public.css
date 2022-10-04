@@ -6,8 +6,8 @@
 }
 /*table*/
 .el-table{
-    height: calc(100vh - 180px);
-    max-height: calc(100vh - 180px);
+    height: calc(100vh - 210px);
+    max-height: calc(100vh - 210px);
     font-size: 12px;
 }
 .el-table .el-table__cell{

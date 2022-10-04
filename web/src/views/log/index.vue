@@ -9,7 +9,11 @@
       <el-button type="primary" @click="getLogs">查询</el-button>
     </div>
     <el-table :data="tableData" row-key="id" border>
-      <el-table-column label="序号" type="index" width="60"></el-table-column>
+      <el-table-column label="序号" type="index" width="60">
+        <template slot-scope="scope">
+          <span>{{(current - 1) * size + 1 + scope.$index}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作人" prop="username"></el-table-column>
       <el-table-column label="操作说明" prop="description" show-overflow-tooltip></el-table-column>
       <el-table-column label="请求方法" prop="method" show-overflow-tooltip></el-table-column>
@@ -19,19 +23,27 @@
       <el-table-column label="请求耗时" prop="time"></el-table-column>
       <el-table-column label="错误详情" prop="exceptionDetail" show-overflow-tooltip></el-table-column>
     </el-table>
+    <pagination :current.sync="current" :size.sync="size" :total="total" @get-list="getLogs"></pagination>
   </div>
 </template>
 
 <script>
 import {getLogList} from "../../api/log/sysLog";
 import {errorMsg} from "../../utils/message";
+import Pagination from "../../components/Pagination";
 export default {
   name: "index",
+  components: {
+    Pagination
+  },
   data(){
     return{
       blurry: '',
       tableData: [],
       logType: '',
+      current: 1,
+      size: 10,
+      total: 0
     }
   },
   mounted() {
@@ -39,9 +51,15 @@ export default {
   },
   methods: {
     getLogs(){
-      getLogList({blurry: this.blurry}).then(res => {
+      const params = {
+        blurry: this.blurry,
+        currentPage: this.current,
+        size: this.size
+      }
+      getLogList(params).then(res => {
         if (res.success){
           this.tableData = res.data.records
+          this.total = res.data.total
         } else {
           errorMsg(res.msg)
         }
