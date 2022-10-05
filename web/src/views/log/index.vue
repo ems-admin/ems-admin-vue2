@@ -14,8 +14,8 @@
           <span>{{(current - 1) * size + 1 + scope.$index}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作人" prop="username"></el-table-column>
-      <el-table-column label="操作说明" prop="description" show-overflow-tooltip></el-table-column>
+      <el-table-column label="操作人" prop="username" width="100"></el-table-column>
+      <el-table-column label="操作说明" prop="description" show-overflow-tooltip width="150"></el-table-column>
       <el-table-column label="请求方法" prop="method" show-overflow-tooltip></el-table-column>
       <el-table-column label="请求参数" prop="params" show-overflow-tooltip></el-table-column>
       <el-table-column label="IP" prop="ip" width="120"></el-table-column>
@@ -31,6 +31,7 @@
         </template>
       </el-table-column>
       <el-table-column label="请求耗时" prop="time" width="100"></el-table-column>
+      <el-table-column label="操作时间" prop="createTime" width="150"></el-table-column>
       <el-table-column label="操作" prop="option" width="120" align="center">
         <template slot-scope="scope">
           <el-button type="primary" @click="showErrorDetails(scope.row.exceptionDetail)">错误详情</el-button>

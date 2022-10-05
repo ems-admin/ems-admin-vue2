@@ -1,6 +1,7 @@
 package com.ems.system.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class SysLog {
     private String description;
 
     @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GTM+8")
     private LocalDateTime createTime;
 
     public SysLog(String logType, long time){

@@ -18,6 +18,7 @@
 <script>
 import store from "../../store";
 import routers from "../../router/routers";
+import {infoMsg} from "../../utils/message";
 export default {
   name: "Header",
   data(){
@@ -34,12 +35,20 @@ export default {
       }
     },
     logout(){
-      //  清空token
-      store.dispatch('tokenAction', null)
-      //  清空refreshToken
-      store.dispatch('refreshAction', null)
-      //  跳转到登录页面
-      routers.push({path: '/login'})
+      this.$confirm('确定退出当前登录？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        //  清空token
+        store.dispatch('tokenAction', null)
+        //  清空refreshToken
+        store.dispatch('refreshAction', null)
+        //  跳转到登录页面
+        routers.push({path: '/login'})
+      }).catch(() => {
+        infoMsg('操作已取消')
+      })
     }
   }
 }
