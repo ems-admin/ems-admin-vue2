@@ -45,6 +45,8 @@ export default {
             if (res.success){
               //  缓存token
               store.dispatch('tokenAction', res.data.token)
+              //  缓存刷新token
+              store.dispatch('refreshAction', res.data.refreshToken)
               //  缓存当前登录用户信息
               store.dispatch('userInfoAction', res.data.userDto)
               //  切换到首页

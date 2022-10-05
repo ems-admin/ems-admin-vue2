@@ -7,6 +7,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         token: null,
+        //  刷新token
+        refreshToken: null,
         //  当前登录用户信息
         userInfo: null,
         //  是否已拉取用户菜单
@@ -30,6 +32,10 @@ const store = new Vuex.Store({
         //  缓存用户token
         tokenMutation(state, payload){
             state.token = payload
+        },
+        //  缓存刷新token
+        refreshMutation(state, payload){
+            state.refreshToken = payload
         },
         //  缓存当前登录用户信息
         userInfoMutation(state, payload){
@@ -68,6 +74,10 @@ const store = new Vuex.Store({
         //  缓存用户token
         tokenAction(context, data){
             context.commit('tokenMutation', data)
+        },
+        //  缓存用户刷新token
+        refreshAction(context, data){
+            context.commit('refreshMutation', data)
         },
         //  缓存当前登录用户信息
         userInfoAction(context, data){

@@ -46,13 +46,22 @@ instance.interceptors.response.use(
             if (code){
                 //  如果是未授权
                 if (code === 401){
-                    //  同时存在异常信息
-                    if (data){
-                        //  显示错误信息
-                        errorMsg(data.detail)
-                        //  否则跳转至401页面
+                    //  说明token过期，使用refresh_token对当前token进行刷新
+                    const refreshToken = store.state.refreshToken
+                    //  如果存在
+                    if (refreshToken){
+                        this.refreshToken(refreshToken)
+                    //  否则
                     } else {
-                        routers.replace({path: '/401'})
+                        //  清空token
+                        store.dispatch('tokenAction', null)
+                        //  并跳转到登录页面，进行重新登录
+                        routers.push({
+                            path: '/login',
+                            query: {
+                                backto: routers.currentRoute.fullPath
+                            }
+                        })
                     }
                     //  如果是没有权限
                 } else if (code === 403){
@@ -72,5 +81,26 @@ instance.interceptors.response.use(
         return Promise.reject(error)
     }
 )
+
+/**
+ * 刷新token
+ * @param refreshToken
+ */
+export function refreshToken(refreshToken){
+    //  刷新token
+    axios({
+        url: '/auth/refresh',
+        method: 'put',
+        headers: {
+            Authorization: `Bearer ${refreshToken}`
+        }
+    }).then(res => {
+        if (res.success){
+            store.dispatch('tokenAction', res.data)
+        } else {
+            errorMsg(res.msg)
+        }
+    })
+}
 
 export default instance
