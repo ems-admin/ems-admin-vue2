@@ -51,3 +51,16 @@ export function enabledUser(data){
         data
     })
 }
+
+/**
+ * 修改用户密码
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function updatePwd(data){
+    return request({
+        url: '/sys/user/password',
+        method: 'put',
+        data
+    })
+}

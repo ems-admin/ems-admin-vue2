@@ -1,5 +1,6 @@
 package com.ems.system.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ems.system.entity.SysUser;
 import com.ems.system.entity.dto.QueryDto;
@@ -68,4 +69,13 @@ public interface SysUserService {
     * @Date: 2021/11/27
     */
     void enabledUser(SysUser sysUser);
+
+    /**
+    * @Description: 修改用户密码
+    * @Param: [jsonObject]
+    * @return: void
+    * @Author: starao
+    * @Date: 2022/10/6
+    */
+    void updatePassword(JSONObject jsonObject);
 }

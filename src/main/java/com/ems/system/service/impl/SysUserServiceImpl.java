@@ -1,11 +1,13 @@
 package com.ems.system.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ems.common.constant.CommonConstants;
 import com.ems.common.exception.BadRequestException;
+import com.ems.common.utils.SecurityUtil;
 import com.ems.common.utils.StringUtil;
 import com.ems.system.entity.SysUser;
 import com.ems.system.entity.dto.QueryDto;
@@ -169,6 +171,41 @@ public class SysUserServiceImpl implements SysUserService {
     public void enabledUser(SysUser sysUser) {
         try {
             sysUserMapper.updateById(sysUser);
+        } catch (BadRequestException e) {
+            e.printStackTrace();
+            throw new BadRequestException(e.getMsg());
+        }
+    }
+
+    /**
+     * @param jsonObject
+     * @Description: 修改用户密码
+     * @Param: [jsonObject]
+     * @return: void
+     * @Author: starao
+     * @Date: 2022/10/6
+     */
+    @Override
+    public void updatePassword(JSONObject jsonObject) {
+        try {
+            String password = jsonObject.getString("password");
+            String newPassword = jsonObject.getString("newPassword");
+            String confirmPassword = jsonObject.getString("confirmPassword");
+
+            //  获取当前登录用户
+            SysUser user = sysUserMapper.selectById(SecurityUtil.getCurrentUserId());
+            String pwd = user.getPassword();
+            //  校验原密码
+            if (!passwordEncoder.matches(password, pwd)){
+                throw new BadRequestException("原密码错误，请重新输入");
+            }
+            //  校验新密码与确认密码
+            if (!newPassword.equals(confirmPassword)){
+                throw new BadRequestException("新密码与确认密码不相同，请重新输入");
+            }
+            //  修改密码为新密码
+            user.setPassword(passwordEncoder.encode(newPassword));
+            sysUserMapper.updateById(user);
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());

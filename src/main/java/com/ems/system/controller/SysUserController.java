@@ -1,5 +1,6 @@
 package com.ems.system.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.ResultUtil;
 import com.ems.logs.annotation.Log;
@@ -97,6 +98,25 @@ public class SysUserController extends ResultUtil {
         } catch (BadRequestException e) {
             e.printStackTrace();
             return fail(false, e.getMsg());
+        }
+    }
+
+    /**
+    * @Description: 修改用户密码
+    * @Param: [jsonObject]
+    * @return: org.springframework.http.ResponseEntity<java.lang.Object>
+    * @Author: starao
+    * @Date: 2022/10/6
+    */
+    @Log(value = "修改用户密码")
+    @PutMapping("/user/password")
+    public ResponseEntity<Object> updatePassword(@RequestBody JSONObject jsonObject){
+        try {
+            userService.updatePassword(jsonObject);
+            return success(true, "修改成功");
+        } catch (BadRequestException e) {
+            e.printStackTrace();
+            return fail(false, "修改失败");
         }
     }
 }
