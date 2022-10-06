@@ -46,11 +46,11 @@ instance.interceptors.response.use(
             if (code){
                 //  如果是未授权
                 if (code === 401){
-                    //  说明token过期，使用refresh_token对当前token进行刷新
-                    const refreshToken = store.state.refreshToken
+                    //  说明token过期，使用refreshToken对当前token进行刷新
+                    const refresh = store.state.refreshToken
                     //  如果存在
-                    if (refreshToken){
-                        this.refreshToken(refreshToken)
+                    if (refresh){
+                        return againRequest(refresh, error)
                     //  否则
                     } else {
                         //  清空token
@@ -83,20 +83,35 @@ instance.interceptors.response.use(
 )
 
 /**
- * 刷新token
- * @param refreshToken
+ * 重新请求
+ * @param error
+ * @returns {Promise<void>}
  */
-export function refreshToken(refreshToken){
+async function againRequest(refresh, error){
+    await refreshToken(refresh)
+    const config = error.response.config
+    config.headers['Authorization'] = 'Bearer ' + store.state.token
+    const res = await axios.request(config)
+    return res.data
+}
+
+/**
+ * 刷新token
+ * @param refresh
+ * @param config
+ */
+export function refreshToken(refresh){
     //  刷新token
-    axios({
-        url: '/auth/refresh',
+    return axios({
+        url: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : 'http://localhost:8415' + '/auth/refresh',
         method: 'put',
         headers: {
-            Authorization: `Bearer ${refreshToken}`
+            Authorization: `Bearer ${refresh}`
         }
     }).then(res => {
-        if (res.success){
-            store.dispatch('tokenAction', res.data)
+        if (res.data.success){
+            //  刷新token
+            store.dispatch('tokenAction', res.data.data)
         } else {
             errorMsg(res.msg)
         }

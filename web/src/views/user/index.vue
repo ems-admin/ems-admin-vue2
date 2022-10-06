@@ -3,7 +3,7 @@
     <div class="searchDiv">
       <el-input class="searchInput" v-model="blurry" placeholder="请输入用户名或昵称" clearable></el-input>
       <el-button type="primary" @click="getUserList">查询</el-button>
-      <el-button @click="editUser" style="float: right;">新增</el-button>
+      <el-button v-if="hasPer('user:add')" @click="editUser" style="float: right;">新增</el-button>
     </div>
     <el-table :data="tableData" row-key="id" border>
       <el-table-column label="用户名" prop="username"></el-table-column>
@@ -17,9 +17,11 @@
       </el-table-column>
       <el-table-column label="操作" prop="option" width="220px" align="center">
         <template slot-scope="scope">
-          <el-button type="warning" @click="enabledUser(JSON.parse(JSON.stringify(scope.row)))">{{scope.row.enabled ? '停用' : '启用'}}</el-button>
-          <el-button type="primary" @click="editUser(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
-          <el-button type="danger" @click="delUser(scope.row.id, scope.row.username)">删除</el-button>
+          <el-button v-if="hasPer('user:enabled')" type="warning"
+                     @click="enabledUser(JSON.parse(JSON.stringify(scope.row)))">
+            {{scope.row.enabled ? '停用' : '启用'}}</el-button>
+          <el-button v-if="hasPer('user:edit')" type="primary" @click="editUser(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
+          <el-button v-if="hasPer('user:del')" type="danger" @click="delUser(scope.row.id, scope.row.username)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -35,6 +37,8 @@ import editUser from "./editUser";
 import Pagination from "../../components/Pagination";
 import {getUserList, delUser, enabledUser} from "../../api/user/sysUser";
 import {errorMsg, infoMsg, successMsg} from "../../utils/message";
+import {hasPer} from "../../utils/common";
+
 export default {
   name: "index",
   components: {
@@ -56,6 +60,7 @@ export default {
     this.getUserList()
   },
   methods: {
+    hasPer,
     getUserList(){
       getUserList({blurry: this.blurry}).then(res => {
         if (res.success){

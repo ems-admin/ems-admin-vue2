@@ -3,7 +3,7 @@
     <div class="searchDiv">
       <el-input class="searchInput" v-model="blurry" placeholder="请输入角色名称或代码" clearable></el-input>
       <el-button type="primary" @click="getRoleList">查询</el-button>
-      <el-button @click="editRole" style="float: right;">新增</el-button>
+      <el-button v-if="hasPer('role:add')" @click="editRole" style="float: right;">新增</el-button>
     </div>
     <el-table :data="tableData" row-key="id" border height="calc(100vh - 180px)" max-height="calc(100vh - 180px)">
       <el-table-column label="序号" type="index" width="60"></el-table-column>
@@ -12,9 +12,9 @@
       <el-table-column label="角色说明" prop="description"></el-table-column>
       <el-table-column label="操作" prop="option" width="220px" align="center">
         <template slot-scope="scope">
-          <el-button type="success" @click="authorizeRole(scope.row.id)">授权</el-button>
-          <el-button type="primary" @click="editRole(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
-          <el-button type="danger" @click="delRole(scope.row.id, scope.row.roleName)">删除</el-button>
+          <el-button v-if="hasPer('role:authorize')" type="success" @click="authorizeRole(scope.row.id)">授权</el-button>
+          <el-button v-if="hasPer('role:edit')" type="primary" @click="editRole(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
+          <el-button v-if="hasPer('role:del')" type="danger" @click="delRole(scope.row.id, scope.row.roleName)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -30,6 +30,7 @@ import editRole from "./editRole";
 import authorizeRole from "./authorizeRole";
 import {getRoleList, delRole} from "../../api/role/sysRole";
 import {errorMsg, infoMsg, successMsg} from "../../utils/message";
+import {hasPer} from "../../utils/common";
 export default {
   name: "index",
   components: {
@@ -50,6 +51,7 @@ export default {
     this.getRoleList()
   },
   methods: {
+    hasPer,
     //  获取角色列表
     getRoleList(){
       getRoleList({blurry: this.blurry}).then(res => {
