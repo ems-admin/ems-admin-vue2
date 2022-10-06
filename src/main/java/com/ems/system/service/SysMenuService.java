@@ -66,4 +66,13 @@ public interface SysMenuService {
     * @Date: 2022/1/19
     */
     List<String> getUrlsByRoles(List<String> currentRoles);
+
+    /**
+    * @Description: 获取权限列表
+    * @Param: []
+    * @return: java.util.List<java.lang.String>
+    * @Author: starao
+    * @Date: 2022/10/6
+    */
+    List<String> getPermission();
 }

@@ -51,4 +51,13 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
     * @Date: 2021/12/17
     */
     List<SysMenu> getAllMenusByChildId(@Param("menuId") Long menuId);
+
+    /**
+    * @Description: 获取权限列表
+    * @Param: [roles]
+    * @return: java.util.List<java.lang.String>
+    * @Author: starao
+    * @Date: 2022/10/6
+    */
+    List<String> getPermission(@Param("roles") List<String> roles);
 }

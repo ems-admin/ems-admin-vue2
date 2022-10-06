@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ems.common.constant.CommonConstants;
 import com.ems.common.exception.BadRequestException;
+import com.ems.common.utils.SecurityUtil;
 import com.ems.common.utils.StringUtil;
 import com.ems.system.entity.SysMenu;
 import com.ems.system.entity.SysRoleMenu;
@@ -220,6 +221,33 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<String> getUrlsByRoles(List<String> roles) {
         try {
             return menuMapper.getMenuUrlByRole(roles);
+        } catch (BadRequestException e) {
+            e.printStackTrace();
+            throw new BadRequestException(e.getMsg());
+        }
+    }
+
+    /**
+     * @Description: 获取权限列表
+     * @Param: []
+     * @return: java.util.List<java.lang.String>
+     * @Author: starao
+     * @Date: 2022/10/6
+     */
+    @Override
+    public List<String> getPermission() {
+        try {
+            List<String> roles = SecurityUtil.getCurrentRoles();
+            List<String> permissions = new ArrayList<>();
+            if (roles.contains(CommonConstants.ROLE_ADMIN)){
+                LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
+                wrapper.select(SysMenu::getPermission);
+                wrapper.eq(SysMenu::getType, "3");
+                permissions = menuMapper.selectObjs(wrapper).stream().map(o -> (String)o).collect(Collectors.toList());
+            } else {
+                permissions = menuMapper.getPermission(roles);
+            }
+            return permissions;
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());

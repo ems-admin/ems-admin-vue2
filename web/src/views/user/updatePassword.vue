@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="修改密码" :visible.sync="visible" :close-on-click-modal="false" @opened="openFun">
+  <el-dialog title="修改密码" :visible.sync="visible" :close-on-click-modal="false">
     <el-form :model="passwordForm" :rules="rules" ref="passwordRef" label-width="120px">
       <el-form-item label="原密码" prop="password">
         <el-input type="password" v-model="passwordForm.password" placeholder="请输入原密码" clearable></el-input>

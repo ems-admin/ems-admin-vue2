@@ -15,6 +15,8 @@ const store = new Vuex.Store({
         isLoadMenu: false,
         //  所有菜单（系统+用户动态授权）
         routers: null,
+        //  权限列表
+        permission: null,
         //  当前激活菜单
         activeIndex: '首页',
         //  所有已打开的菜单
@@ -28,6 +30,10 @@ const store = new Vuex.Store({
         //  缓存用户菜单列表
         routerMutation(state, payload){
             state.routers = payload
+        },
+        //  缓存用户权限列表
+        permissionMutation(state, payload){
+            state.permission = payload
         },
         //  缓存用户token
         tokenMutation(state, payload){
@@ -70,6 +76,10 @@ const store = new Vuex.Store({
         //  缓存用户菜单列表
         routerAction(context, data){
             context.commit('routerMutation', data)
+        },
+        //  缓存用户权限
+        permissionAction(context, data){
+            context.commit('permissionMutation', data)
         },
         //  缓存用户token
         tokenAction(context, data){

@@ -45,6 +45,24 @@ public class SysMenuController extends ResultUtil {
     }
 
     /**
+    * @Description: 获取权限列表
+    * @Param: []
+    * @return: org.springframework.http.ResponseEntity<java.lang.Object>
+    * @Author: starao
+    * @Date: 2022/10/6
+    */
+    @Log(value = "获取权限列表")
+    @GetMapping("/menu/permission")
+    public ResponseEntity<Object> getPermission(){
+        try {
+            return success(true, menuService.getPermission());
+        } catch (BadRequestException e) {
+            e.printStackTrace();
+            return fail(false, e.getMsg());
+        }
+    }
+
+    /**
     * @Description: 查询当前用户所有权限菜单
     * @Param: []
     * @return: org.springframework.http.ResponseEntity<java.lang.Object>

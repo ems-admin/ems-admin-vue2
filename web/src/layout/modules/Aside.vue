@@ -28,7 +28,7 @@
 
 <script>
 import store from "../../store";
-import {getMenuTree} from "../../api/menu/sysMenu";
+import {getMenuTree, getPermission} from "../../api/menu/sysMenu";
 import {errorMsg} from "../../utils/message";
 export default {
   name: "Aside",
@@ -46,6 +46,7 @@ export default {
   },
   mounted() {
     this.getMenuTree()
+    this.getPermission()
   },
   methods: {
     //  获取当前用户菜单树
@@ -53,6 +54,16 @@ export default {
       getMenuTree().then(res => {
         if (res.success){
           this.menuList = res.data
+        } else {
+          errorMsg(res.msg)
+        }
+      })
+    },
+    //  获取当前用户的按钮权限列表
+    getPermission(){
+      getPermission().then(res => {
+        if (res.success){
+          store.dispatch('permissionAction', res.data)
         } else {
           errorMsg(res.msg)
         }

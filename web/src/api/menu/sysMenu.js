@@ -60,3 +60,11 @@ export function delMenu(params){
         params
     })
 }
+
+
+export function getPermission(){
+    return request({
+        url: '/sys/menu/permission',
+        method: 'get'
+    })
+}
