@@ -54,14 +54,25 @@ public class SysMenuServiceImpl implements SysMenuService {
                 wrapper.ne(SysMenu::getType, "3");
                 wrapper.orderByAsc(SysMenu::getSort);
                 menuListAll = menuMapper.selectList(wrapper);
+            //  否则
             } else {
+                //  获取当前用户授权的菜单
                 menuListAll = menuMapper.getMenuTree(roles);
                 if (!CollectionUtils.isEmpty(menuListAll)){
                     Set<SysMenu> menuSet = new HashSet<>();
+                    List<SysMenu> list = new ArrayList<>();
+                    //  遍历所有菜单
                     for (SysMenu sysMenu : menuListAll) {
-                        menuSet.addAll(getAllMenusByChildId(sysMenu.getId()));
+                        list.add(sysMenu);
+                        //  获取当前菜单的所有上级菜单
+                        getAllMenusByChildId(sysMenu.getParentId(), list);
+                        for (SysMenu menu : list) {
+                            if (menuSet.stream().noneMatch(item -> item.getId().equals(menu.getId()))){
+                                menuSet.add(menu);
+                            }
+                        }
                     }
-                    menuListAll = new ArrayList<>(menuSet).stream().sorted(Comparator.comparing(SysMenu::getId)).collect(Collectors.toList());
+                    menuListAll = menuSet.stream().sorted(Comparator.comparing(SysMenu::getId)).collect(Collectors.toList());
                 }
             }
             JSONArray jsonArray = new JSONArray();
@@ -238,7 +249,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<String> getPermission() {
         try {
             List<String> roles = SecurityUtil.getCurrentRoles();
-            List<String> permissions = new ArrayList<>();
+            List<String> permissions;
             if (roles.contains(CommonConstants.ROLE_ADMIN)){
                 LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
                 wrapper.select(SysMenu::getPermission);
@@ -278,13 +289,20 @@ public class SysMenuServiceImpl implements SysMenuService {
     /**
     * @Description: 通过菜单Id获取所有上级菜单
     * @Param: [menuId]
-    * @return: java.util.List<com.ems.system.entity.SysMenu>
     * @Author: starao
     * @Date: 2021/12/17
     */
-    private List<SysMenu> getAllMenusByChildId(Long menuId){
+    private void getAllMenusByChildId(Long menuId, List<SysMenu> list){
         try {
-            return menuMapper.getAllMenusByChildId(menuId);
+            SysMenu sysMenu = menuMapper.selectById(menuId);
+            //  如果当前菜单不是最顶级的菜单
+            if (sysMenu != null){
+                list.add(sysMenu);
+                //  如果当前菜单的上级菜单也不是最顶级的菜单
+                if (!sysMenu.getParentId().equals(0L)){
+                    getAllMenusByChildId(sysMenu.getParentId(), list);
+                }
+            }
         } catch (BadRequestException e) {
             e.printStackTrace();
             throw new BadRequestException(e.getMsg());

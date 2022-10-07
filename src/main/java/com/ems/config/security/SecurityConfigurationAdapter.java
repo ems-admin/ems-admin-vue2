@@ -1,7 +1,5 @@
 package com.ems.config.security;
 
-import com.ems.common.constant.SecurityConstants;
-import com.ems.common.utils.RedisUtil;
 import com.ems.config.filter.JwtAuthorizationFilter;
 import com.ems.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +39,6 @@ public class SecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
     private final SecurityProblemSupport securityProblemSupport;
 
     private final SysMenuService menuService;
-
-    private final RedisUtil redisUtil;
 
     /**
     * @Description: 配置SpringSecurity推荐的加密方式
@@ -111,7 +107,7 @@ public class SecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
     * @Date: 2021/11/27
     */
     private JwtConfigurerAdapter securityConfigurationAdapter() throws Exception {
-        return new JwtConfigurerAdapter(new JwtAuthorizationFilter(authenticationManager(), menuService, redisUtil));
+        return new JwtConfigurerAdapter(new JwtAuthorizationFilter(authenticationManager(), menuService));
     }
 
 }

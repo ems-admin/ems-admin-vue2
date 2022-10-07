@@ -34,7 +34,7 @@
       <el-table-column label="操作时间" prop="createTime" width="150"></el-table-column>
       <el-table-column label="操作" prop="option" width="120" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="showErrorDetails(scope.row.exceptionDetail)">错误详情</el-button>
+          <el-button type="primary" :disabled="scope.row.logType === '1'" @click="showErrorDetails(scope.row.exceptionDetail)">错误详情</el-button>
         </template>
       </el-table-column>
     </el-table>
