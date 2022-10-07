@@ -11,7 +11,7 @@
     </el-tree>
     <span slot="footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="submitAuthorize">授权</el-button>
+      <el-button type="primary" :loading="isLoading" @click="submitAuthorize">授权</el-button>
     </span>
   </el-dialog>
 </template>
@@ -42,6 +42,7 @@ export default {
   },
   data(){
     return{
+      isLoading: false,
       treeData: [],
       authorizeData: [],
       defaultProps: {
@@ -86,6 +87,7 @@ export default {
     },
     //  提交
     submitAuthorize(){
+      this.isLoading = true
       authorizeRole({roleId: this.roleId, menuIds: this.$refs.tree.getCheckedKeys()}).then(res => {
         if (res.success){
           successMsg(res.data)
@@ -93,6 +95,7 @@ export default {
         } else {
           errorMsg(res.msg)
         }
+        this.isLoading = false
       })
     }
   }

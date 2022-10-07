@@ -13,7 +13,7 @@
     </el-form>
     <span slot="footer">
       <el-button @click="resetForm('roleRef')">重置</el-button>
-      <el-button type="primary" @click="submitRole('roleRef')">确定</el-button>
+      <el-button type="primary" :loading="isLoading" @click="submitRole('roleRef')">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -70,6 +70,7 @@ export default {
     submitRole(formName){
       this.$refs[formName].validate((valid) => {
         if (valid){
+          this.isLoading = true
           editRole(this.roleForm).then(res => {
             if (res.success){
               successMsg(res.data)
@@ -78,6 +79,7 @@ export default {
             } else {
               errorMsg(res.msg)
             }
+            this.isLoading = false
           })
         }
       })

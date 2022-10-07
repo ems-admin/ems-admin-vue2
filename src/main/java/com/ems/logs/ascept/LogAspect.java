@@ -1,5 +1,6 @@
 package com.ems.logs.ascept;
 
+import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.RequestHolder;
 import com.ems.common.utils.SecurityUtil;
 import com.ems.common.utils.StringUtil;
@@ -14,6 +15,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -75,6 +77,7 @@ public class LogAspect {
     * @Date: 2021/11/27
     */
     @AfterThrowing(pointcut = "logPointcut()", throwing = "e")
+    @Transactional(rollbackFor = Exception.class)
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e){
         SysLog sysLog = new SysLog("2",System.currentTimeMillis() - currentTime.get());
         currentTime.remove();

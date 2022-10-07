@@ -15,7 +15,7 @@
     </el-form>
     <span slot="footer">
       <el-button @click="resetForm('userRef')">重置</el-button>
-      <el-button type="primary" @click="submitUser('userRef')">确定</el-button>
+      <el-button type="primary" :loading="isLoading" @click="submitUser('userRef')">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -89,6 +89,7 @@ export default {
     submitUser(formName){
       this.$refs[formName].validate((valid) => {
         if (valid){
+          this.isLoading = true
           editUser(this.userForm).then(res => {
             if (res.success){
               successMsg(res.data)
@@ -97,6 +98,7 @@ export default {
             } else {
               errorMsg(res.msg)
             }
+            this.isLoading = false
           })
         }
       })

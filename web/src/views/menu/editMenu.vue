@@ -35,7 +35,7 @@
     </el-form>
     <span slot="footer">
       <el-button @click="resetForm('menuRef')">重置</el-button>
-      <el-button type="primary" @click="submitMenu('menuRef')">确定</el-button>
+      <el-button type="primary" :loading="isLoading" @click="submitMenu('menuRef')">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -129,6 +129,7 @@ export default {
     submitMenu(formName){
       this.$refs[formName].validate((valid) => {
         if (valid){
+          this.isLoading = true
           editMenu(this.menuForm).then(res => {
             if (res.success){
               successMsg(res.data)
@@ -137,6 +138,7 @@ export default {
             } else {
               errorMsg(res.msg)
             }
+            this.isLoading = false
           })
         }
       })

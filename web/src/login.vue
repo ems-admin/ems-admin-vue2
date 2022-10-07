@@ -9,7 +9,7 @@
         <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="button" type="primary" :loading="isLoading" @click="submitLogin('loginRef')">{{btnStr}}</el-button>
+        <el-button class="button" type="primary" :loading="isLoading" @click="submitLogin('loginRef')">登  录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -25,7 +25,7 @@ export default {
   name: "login",
   data(){
     return {
-      btnStr: '登  录',
+      btnStr: '',
       isLoading: false,
       loginForm: {
         username: '',
@@ -41,6 +41,7 @@ export default {
     submitLogin(formName){
       this.$refs[formName].validate((valid) => {
         if (valid){
+          this.isLoading = true
           login(this.loginForm).then(res => {
             if (res.success){
               //  缓存token
@@ -54,6 +55,7 @@ export default {
             } else {
               errorMsg(res.msg)
             }
+            this.isLoading = false
           })
         }
       })

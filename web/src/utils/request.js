@@ -6,7 +6,7 @@ import {errorMsg} from "./message";
 //  创建axios实例
 const instance = axios.create({
     baseURL: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : 'http://localhost:8415',
-    timeout: 5000   //  请求超时时间（毫秒）
+    timeout: 60000   //  请求超时时间（毫秒）
 })
 
 //  request拦截器
@@ -114,6 +114,8 @@ export function refreshToken(refresh){
             store.dispatch('tokenAction', res.data.data)
         } else {
             errorMsg(res.msg)
+            //  清空token
+            store.dispatch('tokenAction', null)
         }
     })
 }
