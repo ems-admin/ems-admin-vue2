@@ -16,8 +16,8 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" prop="option" width="220px" align="center">
-        <template slot-scope="scope">
-          <el-button v-if="hasPer('user:enabled')" type="warning"
+        <template v-if="scope.row.username !== username" slot-scope="scope">
+          <el-button v-if="hasPer('user:enabled')" :type="buttonType(scope.row.enabled)"
                      @click="enabledUser(JSON.parse(JSON.stringify(scope.row)))">
             {{scope.row.enabled ? '停用' : '启用'}}</el-button>
           <el-button v-if="hasPer('user:edit')" type="primary" @click="editUser(JSON.parse(JSON.stringify(scope.row)))">编辑</el-button>
@@ -38,6 +38,7 @@ import Pagination from "../../components/Pagination";
 import {getUserList, delUser, enabledUser} from "../../api/user/sysUser";
 import {errorMsg, infoMsg, successMsg} from "../../utils/message";
 import {hasPer} from "../../utils/common";
+import store from "../../store";
 
 export default {
   name: "index",
@@ -48,6 +49,7 @@ export default {
   data(){
     return{
       blurry: '',
+      username: store.state.userInfo.username,
       tableData: [],
       dialogVisible: false,
       userObj: {},
@@ -113,6 +115,13 @@ export default {
       }).catch(() => {
         infoMsg('操作已取消')
       })
+    },
+    buttonType(type){
+      if (type){
+        return 'warning'
+      } else {
+        return 'success'
+      }
     }
   }
 }
