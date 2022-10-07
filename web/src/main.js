@@ -6,6 +6,7 @@ import router from "./router/routers";
 import store from "./store";
 
 import './assets/css/public.css'
+import './assets/iconfont/iconfont.css'
 
 import './utils/message'
 import './router/index'

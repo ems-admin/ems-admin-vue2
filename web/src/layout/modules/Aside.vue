@@ -6,7 +6,7 @@
       <span>EMS-ADMIN</span>
     </div>
     <!--默认将首页放在第一位-->
-    <el-menu-item route="/home" index="首页">首页</el-menu-item>
+    <el-menu-item route="/home" index="首页"><i class="iconfont icon-home"></i>首页</el-menu-item>
     <el-submenu v-for="(menu, menuIndex) in menuList" :key="menuIndex" :index="menu.name">
       <template slot="title">
         <span>{{menu.name}}</span>
