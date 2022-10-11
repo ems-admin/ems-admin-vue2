@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12865693",
+      "name": "setting",
+      "font_class": "setting",
+      "unicode": "e6f0",
+      "unicode_decimal": 59120
+    },
+    {
       "icon_id": "1166053",
       "name": "日志",
       "font_class": "rizhi",
@@ -43,14 +50,14 @@
     {
       "icon_id": "11372676",
       "name": "密码",
-      "font_class": "mima",
+      "font_class": "password",
       "unicode": "e8b2",
       "unicode_decimal": 59570
     },
     {
       "icon_id": "12704986",
       "name": "用户名",
-      "font_class": "yonghuming",
+      "font_class": "username",
       "unicode": "e60a",
       "unicode_decimal": 58890
     },

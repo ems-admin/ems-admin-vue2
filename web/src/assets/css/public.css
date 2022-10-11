@@ -1,43 +1,16 @@
 /*button*/
-.el-button{
-    font-size: 12px;
-    padding: 7px 15px;
-    border-radius: 3px;
-}
+
 /*table*/
 .el-table{
     height: calc(100vh - 210px);
     max-height: calc(100vh - 210px);
-    font-size: 12px;
-}
-.el-table .el-table__cell{
-    padding: 6px 0;
 }
 /*tabs*/
 .el-tabs__item{
     border-left: none!important;
 }
 /*input*/
-.el-input{
-    font-size: 12px;
-}
-.el-input__inner{
-    height: 28px;
-    line-height: 28px;
-}
-.el-input__clear{
-    height: 28px;
-    line-height: 28px;
-}
-.el-form-item__label{
-    font-size: 12px;
-    height: 28px;
-    line-height: 28px;
-}
-.el-input__icon{
-    height: 28px;
-    line-height: 28px;
-}
+
 /*select*/
 .el-select{
     width: 100%;

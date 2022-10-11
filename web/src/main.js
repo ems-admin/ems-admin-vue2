@@ -14,7 +14,7 @@ import './utils/common'
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, {size: 'mini'})
 
 new Vue({
   ElementUI,

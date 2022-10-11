@@ -9,6 +9,7 @@
     <el-menu-item route="/home" index="首页"><i class="iconfont icon-home"></i>首页</el-menu-item>
     <el-submenu v-for="(menu, menuIndex) in menuList" :key="menuIndex" :index="menu.name">
       <template slot="title">
+        <i :class="menu.icon"></i>
         <span>{{menu.name}}</span>
       </template>
       <el-submenu v-if="menu.children.children && menu.children.children.length > 0" index="">
@@ -20,6 +21,7 @@
           :key="itemIndex"
           :index="item.name"
           :route="item.path" @click="openTab(item.name, item.path)">
+        <i :class="item.icon"></i>
         {{item.name}}
       </el-menu-item>
     </el-submenu>

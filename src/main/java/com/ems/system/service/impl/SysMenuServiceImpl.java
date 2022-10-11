@@ -102,6 +102,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 jsonObject.put("parentId", sysMenu.getParentId());
                 jsonObject.put("name", sysMenu.getName());
                 jsonObject.put("path", sysMenu.getPath());
+                jsonObject.put("icon", sysMenu.getIcon());
                 jsonObject.put("sort", sysMenu.getSort());
                 jsonObject.put("component", sysMenu.getComponent());
                 jsonObject.put("permission", sysMenu.getPermission());

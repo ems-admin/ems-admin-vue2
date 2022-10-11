@@ -1,20 +1,20 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3689733 */
-  src: url('iconfont.woff2?t=1665144606504') format('woff2'),
-       url('iconfont.woff?t=1665144606504') format('woff'),
-       url('iconfont.ttf?t=1665144606504') format('truetype');
+  src: url('iconfont.woff2?t=1665500219857') format('woff2'),
+       url('iconfont.woff?t=1665500219857') format('woff'),
+       url('iconfont.ttf?t=1665500219857') format('truetype');
 }
 
 .iconfont {
   font-family: "iconfont" !important;
-  width: 24px;
-  text-align: center;
-  font-size: 18px;
-  margin-right: 5px;
-  vertical-align: middle;
+  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-setting:before {
+  content: "\e6f0";
 }
 
 .icon-rizhi:before {

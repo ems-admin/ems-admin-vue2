@@ -23,6 +23,17 @@
       <el-form-item label="菜单名称" prop="name">
         <el-input v-model="menuForm.name" placeholder="请输入菜单名称"></el-input>
       </el-form-item>
+      <el-form-item label="选择图标" prop="icon">
+            <el-popover placement="bottom" trigger="click">
+              <el-row class="icon-row">
+                <el-col v-for="(item, index) in iconList" :key="index" :span="8">
+                  <i :class="item.font_class" style="font-size: 40px;" @click="checkIcon(item.font_class)"></i>
+                  <i style="display: flow-root;">{{item.name}}</i>
+                </el-col>
+              </el-row>
+              <el-input v-model="menuForm.icon" prefix-icon="请选择菜单图标" slot="reference"></el-input>
+            </el-popover>
+      </el-form-item>
       <el-form-item v-if="menuForm.type === '2' || menuForm.type === '3'" label="访问路径" prop="path">
         <el-input v-model="menuForm.path" placeholder="请输入菜单路径"></el-input>
       </el-form-item>
@@ -80,7 +91,8 @@ export default {
         path: '',
         component: '',
         permission: '',
-        type: '1'
+        type: '1',
+        icon: ''
       },
       rules: {
         parentId: [{required: true, message: '上级菜单不能为空', trigger: 'change'}],
@@ -103,7 +115,8 @@ export default {
           label: node.name,
           children: node.children
         }
-      }
+      },
+      iconList: []
     }
   },
   methods: {
@@ -114,6 +127,7 @@ export default {
         this.menuForm = this.menuObj
       }
       this.getMenuTree()
+      this.getIconList()
     },
     //  获取下拉菜单树
     getMenuTree() {
@@ -142,6 +156,18 @@ export default {
           })
         }
       })
+    },
+    getIconList(){
+      const iconJson = require('../../assets/iconfont/iconfont.json')
+      const iconClassList = JSON.parse(JSON.stringify(iconJson.glyphs))
+      this.iconList = iconClassList.map(item => {
+        item.font_class = 'iconfont icon-' + item.font_class
+        return item
+      })
+      console.info(this.iconList)
+    },
+    checkIcon(value){
+      this.menuForm.icon = value
     }
   }
 }
@@ -154,5 +180,13 @@ export default {
  ::v-deep .el-form-item__content{
    line-height: 28px;
    font-size: 12px;
+ }
+ ::v-deep .el-popover{
+   width: 50% !important;
+ }
+ .icon-row{
+   text-align: center;
+   height: 300px;
+   overflow-y: auto;
  }
 </style>
