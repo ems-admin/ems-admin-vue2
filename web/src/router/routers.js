@@ -42,7 +42,7 @@ export const routerMap = [
 
 //  创建路由
 const routers = new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     routes: routerMap
 })
 

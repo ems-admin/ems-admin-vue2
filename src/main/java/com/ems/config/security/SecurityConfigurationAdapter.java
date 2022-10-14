@@ -69,8 +69,15 @@ public class SecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity){
         webSecurity.ignoring()
+                .antMatchers(HttpMethod.GET, "/")
+                .antMatchers(HttpMethod.GET, "index.html")
+                .antMatchers(HttpMethod.GET, "/favicon.ico")
                 .antMatchers(HttpMethod.POST,"/auth/login")
-                .antMatchers(HttpMethod.PUT, "/auth/refresh");
+                .antMatchers(HttpMethod.PUT, "/auth/refresh")
+                .antMatchers("/js/**")
+                .antMatchers("/fonts/**")
+                .antMatchers("/img/**")
+                .antMatchers("/css/**");
     }
     
     @Override
