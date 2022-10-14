@@ -1,9 +1,9 @@
 <template>
-  <el-menu :default-active="defaultActive" :unique-opened="true" router
-           background-color="#545c64" text-color="#fff" class="el-menu-vertical-demo">
-    <div class="logo">
+  <el-menu :default-active="defaultActive" :unique-opened="true" router :collapse="isCollapse"
+           background-color="#545c64" text-color="#fff">
+    <div class="logo" @click="changeCollapse">
       <el-image :src="require('../../assets/image/ems.png')" style="width: 40px;"></el-image>
-      <span>EMS-ADMIN</span>
+<!--      <span v-if="!isCollapse">EMS-ADMIN</span>-->
     </div>
     <!--默认将首页放在第一位-->
     <el-menu-item route="/home" index="首页"><i class="iconfont icon-home"></i>首页</el-menu-item>
@@ -36,7 +36,8 @@ export default {
   name: "Aside",
   data(){
     return {
-      menuList: []
+      menuList: [],
+      isCollapse: false
     }
   },
   computed: {
@@ -77,6 +78,14 @@ export default {
       store.dispatch('addTabAction', {name: name, path: path})
       //  将激活菜单改成选中的菜单
       store.dispatch('activeIndexAction', name)
+    },
+    changeCollapse(){
+      this.isCollapse = !this.isCollapse
+      if (this.isCollapse){
+        this.$emit('update:width', '64px')
+      } else {
+        this.$emit('update:width', '230px')
+      }
     }
   }
 }
@@ -93,5 +102,6 @@ export default {
     color: white;
     font-size: 20px;
     height: 60px;
+    cursor: pointer;
   }
 </style>

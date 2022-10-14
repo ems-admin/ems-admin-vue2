@@ -1,7 +1,7 @@
 <template>
   <el-container>
-    <el-aside width="250px">
-      <Aside></Aside>
+    <el-aside :width.sync="width">
+      <Aside :width.sync="width"></Aside>
     </el-aside>
     <el-container>
       <el-header>
@@ -36,6 +36,11 @@ export default {
     store.dispatch('activeIndexAction', '首页')
     //  最后打开首页
     routers.push({path: '/home'})
+  },
+  data(){
+    return{
+      width: '230px'
+    }
   }
 }
 </script>
