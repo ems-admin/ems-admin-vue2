@@ -30,3 +30,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 前端打包文件 ###
+/src/main/resources/dist
