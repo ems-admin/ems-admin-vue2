@@ -7,9 +7,11 @@ module.exports = {
     publicPath: './',
     //  代理配置
     devServer: {
-        '/**': {
-            target: `http://${http}`,
-            timeout: 60 * 1000
+        proxy: {
+            '/**': {
+                target: `http://${http}`,
+                timeout: 60 * 1000
+            }
         }
     },
     configureWebpack: {

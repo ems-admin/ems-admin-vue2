@@ -33,7 +33,7 @@ export const routerMap = [
         children: [
             {
                 path: '/home',
-                name: 'home',
+                name: '首页',
                 component: Home
             }
         ]
