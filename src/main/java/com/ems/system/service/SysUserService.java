@@ -2,6 +2,7 @@ package com.ems.system.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ems.system.entity.SysUser;
 import com.ems.system.entity.dto.QueryDto;
 import com.ems.system.entity.dto.UserDto;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author: starao
  * @create: 2021-11-27 14:28
  **/
-public interface SysUserService {
+public interface SysUserService extends IService<SysUser> {
 
     /**
     * @Description: 根据用户名查询用户

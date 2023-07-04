@@ -1,6 +1,7 @@
 package com.ems.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ems.system.entity.SysLog;
 import com.ems.system.entity.dto.QueryDto;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,7 +12,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @author: starao
  * @create: 2021-11-27 14:23
  **/
-public interface SysLogService {
+public interface SysLogService extends IService<SysLog> {
 
     /**
     * @Description: 保存日志

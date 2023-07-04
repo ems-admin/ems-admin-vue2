@@ -1,6 +1,7 @@
 package com.ems.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ems.common.utils.BaseEntity;
@@ -8,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @program: ems-admin-boot
@@ -20,18 +24,39 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("sys_user")
-public class SysUser extends BaseEntity {
+public class SysUser extends BaseEntity implements Serializable {
 
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String username;
-
-    private String nickName;
-
-    private String password;
-
+    /**
+     * 邮箱
+     */
     private String email;
 
-    private boolean enabled;
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 密码
+     */
+    private String password;
+
+    /**
+     * 状态（0停用 1启用）
+     */
+    private Boolean enabled;
+
+    /**
+     * 昵称
+     */
+    private String nickName;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 }

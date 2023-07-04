@@ -2,6 +2,7 @@ package com.ems.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ems.common.exception.BadRequestException;
 import com.ems.system.entity.SysRoleUser;
 import com.ems.system.mapper.SysRoleUserMapper;
@@ -20,7 +21,7 @@ import java.util.List;
  **/
 @Service
 @RequiredArgsConstructor
-public class SysRoleUserServiceImpl implements SysRoleUserService {
+public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRoleUser> implements SysRoleUserService {
 
     private final SysRoleUserMapper roleUserMapper;
 

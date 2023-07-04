@@ -1,6 +1,7 @@
 package com.ems.system.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ems.system.entity.SysMenu;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author: starao
  * @create: 2021-11-27 14:24
  **/
-public interface SysMenuService {
+public interface SysMenuService extends IService<SysMenu> {
 
     /**
     * @Description: 获取菜单树

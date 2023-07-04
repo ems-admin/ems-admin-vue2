@@ -1,5 +1,6 @@
 package com.ems.system.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ems.system.entity.SysRoleUser;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author: starao
  * @create: 2021-11-27 14:28
  **/
-public interface SysRoleUserService {
+public interface SysRoleUserService extends IService<SysRoleUser> {
 
     /**
     * @Description: 通过角色ID查询绑定的用户
