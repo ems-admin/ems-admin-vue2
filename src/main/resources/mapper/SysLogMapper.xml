@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.SysLogMapper">
+<mapper namespace="com.ems.system.mapper.SysLogMapper">
 
-    <resultMap id="BaseResultMap" type="generator.domain.SysLog">
+    <resultMap id="BaseResultMap" type="com.ems.system.entity.SysLog">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="logType" column="log_type" jdbcType="VARCHAR"/>
             <result property="method" column="method" jdbcType="VARCHAR"/>

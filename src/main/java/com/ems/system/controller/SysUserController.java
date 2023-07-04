@@ -93,7 +93,7 @@ public class SysUserController extends ResultUtil {
     @Log("改变用户状态")
     @PutMapping("/user/enabled")
     public ResponseEntity<Object> enabledUser(@RequestBody SysUser sysUser){
-        String str = sysUser.isEnabled() ? "启用" : "停用";
+        String str = sysUser.getEnabled() ? "启用" : "停用";
         try {
             userService.enabledUser(sysUser);
             return success(true, str + "成功");
