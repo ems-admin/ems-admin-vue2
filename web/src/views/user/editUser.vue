@@ -74,6 +74,7 @@ export default {
         //  将roleIds中的字符串数字转化为数字
         this.userForm.roleIds = this.userForm.roleIds.map(Number)
       }
+      this.getRoleList()
     },
     //  获取角色列表
     getRoleList() {

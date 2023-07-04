@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ems.common.constant.CommonConstants;
 import com.ems.common.exception.BadRequestException;
 import com.ems.system.entity.SysRole;
 import com.ems.system.entity.SysRoleUser;
@@ -52,12 +53,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<SysRole> getRoleList(String blurry) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
+        //  隐藏超级管理员角色,避免误操作
+        wrapper.ne(SysRole::getRoleCode, CommonConstants.ROLE_ADMIN);
         if (StringUtils.isNotBlank(blurry)){
-            wrapper.like(SysRole::getRoleName, blurry);
-            wrapper.or();
-            wrapper.like(SysRole::getRoleCode, blurry);
-            wrapper.or();
-            wrapper.like(SysRole::getDescription, blurry);
+            wrapper.and(q -> q.like(SysRole::getRoleCode, blurry).or().like(SysRole::getRoleName, blurry));
         }
         return roleMapper.selectList(wrapper);
     }
