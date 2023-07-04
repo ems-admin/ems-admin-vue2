@@ -4,18 +4,27 @@ package com.ems.config.filter;
 import com.ems.common.constant.SecurityConstants;
 import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.JwtUtil;
+import com.ems.common.utils.StringUtil;
 import com.ems.system.service.SysMenuService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 /**
@@ -24,15 +33,8 @@ import java.io.IOException;
  * @author: starao
  * @create: 2021-11-27 13:15
  **/
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-
-    private final SysMenuService menuService;
-
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, SysMenuService menuService) {
-        super(authenticationManager);
-        this.menuService = menuService;
-    }
-
+@Component
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
     /**
     * @Description: 过滤用户请求
     * @Param: [request, response, filterChain]
@@ -41,11 +43,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     * @Date: 2021/11/27
     */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
+            System.out.println("请求路径:" + request.getRequestURI());
             //  从request中获取token
             String token = this.getTokenFromHttpServletRequest(request);
+            //  如果token不存在,直接放行,由系统Security判断是否具有访问权限
+            if (StringUtil.isBlank(token)){
+                filterChain.doFilter(request, response);
+                return;
+            }
             //  校验token是否有效
             if (JwtUtil.verifyToken(token)){
                 //  获取认证信息
