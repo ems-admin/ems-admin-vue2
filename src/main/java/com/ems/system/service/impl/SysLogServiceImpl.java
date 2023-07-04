@@ -49,48 +49,43 @@ public class SysLogServiceImpl implements SysLogService {
      */
     @Override
     public void save(String username, String ip, ProceedingJoinPoint joinPoint, SysLog sysLog) {
-        try {
-            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-            Method method = signature.getMethod();
-            Log aopLog = method.getAnnotation(Log.class);
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Log aopLog = method.getAnnotation(Log.class);
 
-            // 方法路径
-            String methodName = joinPoint.getTarget().getClass().getName() + "." + signature.getName() + "()";
+        // 方法路径
+        String methodName = joinPoint.getTarget().getClass().getName() + "." + signature.getName() + "()";
 
-            StringBuilder params = new StringBuilder("{");
-            //参数值
-            List<Object> argValues = new ArrayList<>(Arrays.asList(joinPoint.getArgs()));
-            //参数名称
-            for (Object argValue : argValues) {
-                params.append(argValue).append(" ");
-            }
-            // 描述
-            if (sysLog != null) {
-                sysLog.setDescription(aopLog.value());
-            }
-            assert sysLog != null;
-            sysLog.setIp(ip);
+        StringBuilder params = new StringBuilder("{");
+        //参数值
+        List<Object> argValues = new ArrayList<>(Arrays.asList(joinPoint.getArgs()));
+        //参数名称
+        for (Object argValue : argValues) {
+            params.append(argValue).append(" ");
+        }
+        // 描述
+        if (sysLog != null) {
+            sysLog.setDescription(aopLog.value());
+        }
+        assert sysLog != null;
+        sysLog.setIp(ip);
 
-            //  如果是登录
-            String loginPath = "login";
-            if (loginPath.equals(signature.getName())) {
-                try {
-                    username = JSON.parseObject(JSONObject.toJSONString(argValues.get(0))).getString("username");
-                } catch (BadRequestException e) {
-                    SysLogServiceImpl.log.error(e.getMessage(), e);
-                }
+        //  如果是登录
+        String loginPath = "login";
+        if (loginPath.equals(signature.getName())) {
+            try {
+                username = JSON.parseObject(JSONObject.toJSONString(argValues.get(0))).getString("username");
+            } catch (BadRequestException e) {
+                SysLogServiceImpl.log.error(e.getMessage(), e);
             }
-            sysLog.setMethod(methodName);
-            sysLog.setUsername(username);
-            sysLog.setParams(params + " }");
-            if (sysLog.getId() == null) {
-                logMapper.insert(sysLog);
-            } else {
-                logMapper.updateById(sysLog);
-            }
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            throw new BadRequestException(e.getMsg());
+        }
+        sysLog.setMethod(methodName);
+        sysLog.setUsername(username);
+        sysLog.setParams(params + " }");
+        if (sysLog.getId() == null) {
+            logMapper.insert(sysLog);
+        } else {
+            logMapper.updateById(sysLog);
         }
     }
 
@@ -105,23 +100,18 @@ public class SysLogServiceImpl implements SysLogService {
      */
     @Override
     public IPage<SysLog> getLogList(QueryDto queryDto, String logType) {
-        try {
-            LambdaQueryWrapper<SysLog> wrapper = new LambdaQueryWrapper<>();
-            wrapper.orderByDesc(SysLog::getCreateTime);
-            if (StringUtil.isNotBlank(logType)){
-                wrapper.eq(SysLog::getLogType, logType);
-            }
-            if (StringUtil.isNotBlank(queryDto.getBlurry())){
-                wrapper.and(q -> q.like(SysLog::getUsername, queryDto.getBlurry())
-                        .or().like(SysLog::getDescription, queryDto.getBlurry()));
-            }
-            Page<SysLog> page = new Page<>();
-            page.setSize(queryDto.getSize());
-            page.setCurrent(queryDto.getCurrentPage());
-            return logMapper.selectPage(page, wrapper);
-        } catch (BadRequestException e) {
-            e.printStackTrace();
-            throw new BadRequestException(e.getMsg());
+        LambdaQueryWrapper<SysLog> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(SysLog::getCreateTime);
+        if (StringUtil.isNotBlank(logType)){
+            wrapper.eq(SysLog::getLogType, logType);
         }
+        if (StringUtil.isNotBlank(queryDto.getBlurry())){
+            wrapper.and(q -> q.like(SysLog::getUsername, queryDto.getBlurry())
+                    .or().like(SysLog::getDescription, queryDto.getBlurry()));
+        }
+        Page<SysLog> page = new Page<>();
+        page.setSize(queryDto.getSize());
+        page.setCurrent(queryDto.getCurrentPage());
+        return logMapper.selectPage(page, wrapper);
     }
 }
