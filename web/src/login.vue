@@ -8,6 +8,9 @@
       <el-form-item prop="password">
         <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-password" placeholder="请输入密码"></el-input>
       </el-form-item>
+      <el-form-item prop="password">
+        <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-password" placeholder="请输入密码"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button class="button" type="primary" :loading="isLoading" @click="submitLogin('loginRef')">登  录</el-button>
       </el-form-item>
@@ -25,11 +28,12 @@ export default {
   name: "login",
   data(){
     return {
-      btnStr: '',
       isLoading: false,
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        code: '',
+        uuid: ''
       },
       rules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],

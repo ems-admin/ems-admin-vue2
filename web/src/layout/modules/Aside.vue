@@ -8,35 +8,7 @@
     <!--默认将首页放在第一位-->
     <el-menu-item route="/home" index="首页" @click="openTab('首页', '/home')"><i class="iconfont icon-home"></i>首页</el-menu-item>
     <menu-tree :menu-data="menuList"></menu-tree>
-<!--    <el-submenu v-for="(menu, menuIndex) in menuList" :key="menuIndex" :index="menu.name">-->
-<!--      <template slot="title">-->
-<!--        <i :class="menu.icon"></i>-->
-<!--        <span>{{menu.name}}</span>-->
-<!--      </template>-->
-<!--      <el-submenu v-if="menu.children.children && menu.children.children.length > 0" index="">-->
-
-<!--      </el-submenu>-->
-<!--      <el-menu-item-->
-<!--          v-else-->
-<!--          v-for="(item, itemIndex) in menu.children"-->
-<!--          :key="itemIndex"-->
-<!--          :index="item.name"-->
-<!--          :route="item.path" @click="openTab(item.name, item.path)">-->
-<!--        <i :class="item.icon"></i>-->
-<!--        {{item.name}}-->
-<!--      </el-menu-item>-->
-<!--    </el-submenu>-->
   </el-menu>
-<!--  <el-menu :default-active="defaultActive" :unique-opened="true" router :collapse="isCollapse"-->
-<!--          background-color="#545c64" text-color="#fff">-->
-<!--        <div class="logo" @click="changeCollapse">-->
-<!--          <el-image :src="require('../../assets/image/ems.png')" style="width: 40px;"></el-image>-->
-<!--    &lt;!&ndash;      <span v-if="!isCollapse">EMS-ADMIN</span>&ndash;&gt;-->
-<!--    </div>-->
-<!--    &lt;!&ndash;默认将首页放在第一位&ndash;&gt;-->
-<!--    <el-menu-item route="/home" index="首页">首页</el-menu-item>-->
-<!--    <menu-tree :menu-data="menuList"></menu-tree>-->
-<!--  </el-menu>-->
 </template>
 
 <script>
