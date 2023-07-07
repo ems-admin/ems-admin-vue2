@@ -1,10 +1,12 @@
 package com.ems.system.controller;
 
 import com.ems.common.constant.SecurityConstants;
+import com.ems.common.constant.VerifyCodeConstants;
 import com.ems.common.exception.BadRequestException;
 import com.ems.common.utils.JwtUtil;
 import com.ems.common.utils.ResultUtil;
 import com.ems.common.utils.StringUtil;
+import com.ems.config.config.CacheConfig;
 import com.ems.config.security.JwtUser;
 import com.ems.logs.annotation.Log;
 import com.ems.system.entity.SysRole;
@@ -12,6 +14,8 @@ import com.ems.system.entity.SysUser;
 import com.ems.system.entity.dto.UserDto;
 import com.ems.system.service.SysRoleService;
 import com.ems.system.service.SysUserService;
+import com.wf.captcha.ArithmeticCaptcha;
+import com.wf.captcha.base.Captcha;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @program: ems-admin-boot
@@ -42,6 +46,8 @@ public class LoginController extends ResultUtil {
     private final SysRoleService roleService;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final CacheConfig cacheConfig;
 
     @Log("用户登录")
     @PostMapping("/login")
@@ -133,6 +139,38 @@ public class LoginController extends ResultUtil {
             return fail(false, e.getMsg());
         }
         return fail(false, "请重新登录");
+    }
+
+    /**
+     * @Description: 获取验证码
+     * @Param: []
+     * @return: org.springframework.http.ResponseEntity<java.lang.Object>
+     * @Author: starao
+     * @Date: 2022/1/18
+     */
+    @GetMapping("/code")
+    public ResponseEntity<Object> getVerifyCode(){
+        try {
+            // 获取运算的结果
+            Captcha captcha = new ArithmeticCaptcha(VerifyCodeConstants.width, VerifyCodeConstants.height);
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            //当验证码类型为 arithmetic时且长度 >= 2 时，captcha.text()的结果有几率为浮点型
+            String captchaValue = captcha.text();
+            if (captchaValue.contains(".")) {
+                captchaValue = captchaValue.split("\\.")[0];
+            }
+            // 缓存验证码信息,时间1分钟
+            cacheConfig.put(uuid, captchaValue, 1);
+            // 验证码信息
+            Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
+                put("img", captcha.toBase64());
+                put("uuid", uuid);
+            }};
+            return ResponseEntity.ok(imgResult);
+        } catch (BadRequestException e) {
+            e.printStackTrace();
+            return fail(false, e.getMsg());
+        }
     }
 
     /**

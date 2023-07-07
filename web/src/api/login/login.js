@@ -8,3 +8,12 @@ export function login(data){
         data
     })
 }
+
+//  获取验证码
+export function getVerifyCode(params){
+    return request({
+        url: '/auth/code',
+        method: 'get',
+        params
+    })
+}

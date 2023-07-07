@@ -9,7 +9,10 @@
         <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-password" placeholder="请输入密码"></el-input>
+        <div style="display: inline-flex;justify-content: space-between;width: 100%;">
+          <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-captcha" style="width: 170px;" placeholder="请输入验证码"></el-input>
+          <img :src="image">
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button class="button" type="primary" :loading="isLoading" @click="submitLogin('loginRef')">登  录</el-button>
@@ -22,7 +25,7 @@
 import './assets/css/login.css'
 import store from "./store";
 import routers from "./router/routers";
-import {login} from "./api/login/login";
+import {login, getVerifyCode} from "./api/login/login";
 import {errorMsg} from "./utils/message";
 export default {
   name: "login",
@@ -35,13 +38,25 @@ export default {
         code: '',
         uuid: ''
       },
+      image: '',
       rules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
         password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
       }
     }
   },
+  mounted() {
+    this.getCode()
+  },
   methods: {
+    //  获取验证码
+    getCode(){
+      getVerifyCode().then(res => {
+        this.image = res.img
+        this.loginForm.uuid = res.uuid
+      })
+    },
+    //  登录提交
     submitLogin(formName){
       this.$refs[formName].validate((valid) => {
         if (valid){

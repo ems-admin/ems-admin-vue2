@@ -16,14 +16,15 @@
 
     <!--版本管理-->
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <jwt-version>0.11.2</jwt-version>
         <lombok-version>1.18.20</lombok-version>
         <mysql-version>8.0.27</mysql-version>
         <commons-version>3.12.0</commons-version>
         <problem-version>0.25.2</problem-version>
         <fastjson-version>1.2.70</fastjson-version>
+        <mybatis-plus-version>3.5.3.1</mybatis-plus-version>
     </properties>
 
     <dependencies>
@@ -59,7 +60,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.3.1</version>
+            <version>${mybatis-plus-version}</version>
         </dependency>
         <!--redis-->
         <dependency>
@@ -105,6 +106,30 @@
             <groupId>org.zalando</groupId>
             <artifactId>problem-spring-web-starter</artifactId>
             <version>${problem-version}</version>
+        </dependency>
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.1-jre</version>
+        </dependency>
+        <!-- Java图形验证码 -->
+        <dependency>
+            <groupId>com.github.whvcse</groupId>
+            <artifactId>easy-captcha</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <!--兼容高版本JDK,不然使用验证码会报错-->
+        <dependency>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
+        </dependency>
+        <!-- jaxb-api -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.4.0-b180830.0359</version>
         </dependency>
     </dependencies>
 
