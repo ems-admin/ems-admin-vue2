@@ -8,8 +8,12 @@ module.exports = {
     //  代理配置
     devServer: {
         proxy: {
-            '/**': {
+            '/api': {
                 target: `http://${http}`,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                },
                 timeout: 60 * 1000
             }
         }

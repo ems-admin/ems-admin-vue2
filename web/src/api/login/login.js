@@ -3,7 +3,7 @@ import request from "../../utils/request";
 //  登录
 export function login(data){
     return request({
-        url: '/auth/login',
+        url: '/api/auth/login',
         method: 'post',
         data
     })
@@ -12,7 +12,7 @@ export function login(data){
 //  获取验证码
 export function getVerifyCode(params){
     return request({
-        url: '/auth/code',
+        url: '/api/auth/code',
         method: 'get',
         params
     })
