@@ -53,6 +53,10 @@ public class LoginController extends ResultUtil {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody UserDto userDto, HttpServletRequest request){
         try {
+            //  校验验证码
+            if (StringUtil.isBlank(userDto.getCode()) || !checkCode(userDto.getUuid(), userDto.getCode())){
+                return fail(false, "验证码错误");
+            }
             //  根据用户名查询用户是否存在
             SysUser user = userService.findByName(userDto.getUsername());
             if (user == null){
@@ -189,5 +193,16 @@ public class LoginController extends ResultUtil {
             roles.add(sysRole.getRoleCode());
         });
         return roles;
+    }
+
+    /**
+    * @Description: 验证码校验
+    * @Param: [uuid, code]
+    * @return: boolean
+    * @Author: starao
+    * @Date: 2023/7/9
+    */
+    private boolean checkCode(String uuid, String code){
+        return cacheConfig.get(uuid) != null && cacheConfig.get(uuid).equals(code);
     }
 }

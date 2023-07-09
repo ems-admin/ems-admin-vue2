@@ -8,10 +8,10 @@
       <el-form-item prop="password">
         <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-password" placeholder="请输入密码"></el-input>
       </el-form-item>
-      <el-form-item prop="password">
+      <el-form-item prop="code">
         <div style="display: inline-flex;justify-content: space-between;width: 100%;">
-          <el-input type="password" v-model="loginForm.password" prefix-icon="iconfont icon-captcha" style="width: 170px;" placeholder="请输入验证码"></el-input>
-          <img :src="image">
+          <el-input type="text" v-model="loginForm.code" prefix-icon="iconfont icon-captcha" style="width: 170px;" placeholder="请输入验证码"></el-input>
+          <img :src="image" @click="getCode">
         </div>
       </el-form-item>
       <el-form-item>
@@ -41,7 +41,8 @@ export default {
       image: '',
       rules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
+        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+        code: [{ required: true, message: '验证码不能为空', trigger: 'blur' }],
       }
     }
   },
@@ -72,6 +73,7 @@ export default {
               //  切换到首页
               routers.push({path: '/Layout'})
             } else {
+              this.getCode()
               errorMsg(res.msg)
             }
             this.isLoading = false
