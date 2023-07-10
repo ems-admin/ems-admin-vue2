@@ -7,6 +7,7 @@ import com.ems.common.utils.JwtUtil;
 import com.ems.common.utils.StringUtil;
 import com.ems.system.service.SysMenuService;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,6 +48,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             System.out.println("请求路径:" + request.getRequestURI());
+            //  此处为部署后前后端不分离配置需要,如果是前后端分离的部署(即使用nginx进行部署,可删除此if代码块)
+            if (request.getRequestURI().startsWith("/api/")) {
+                // 修改请求路径，去除 "/api/" 前缀
+                String newRequestURI = request.getRequestURI().substring(4);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(newRequestURI);
+                dispatcher.forward(request, response);
+            }
             //  从request中获取token
             String token = this.getTokenFromHttpServletRequest(request);
             //  如果token不存在或者携带了刷新token(长度小于150,可以根据自己生成的refreshToken来判断),
