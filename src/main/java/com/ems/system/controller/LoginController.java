@@ -203,6 +203,11 @@ public class LoginController extends ResultUtil {
     * @Date: 2023/7/9
     */
     private boolean checkCode(String uuid, String code){
-        return cacheConfig.get(uuid) != null && cacheConfig.get(uuid).equals(code);
+        boolean b = false;
+        if (cacheConfig.get(uuid) != null && cacheConfig.get(uuid).equals(code)){
+            b = true;
+            cacheConfig.invalidate(uuid);
+        }
+        return b;
     }
 }

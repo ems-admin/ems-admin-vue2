@@ -18,13 +18,32 @@ public class CacheConfig {
 
     private Cache<String, String> cache;
 
+    /**
+     * 缓存
+     * @param key
+     * @param value
+     * @param expireTime
+     */
     public void put(String key, String value, int expireTime) {
         cache = CacheBuilder.newBuilder().expireAfterWrite(expireTime, TimeUnit.MINUTES).build();
         cache.put(key, value);
     }
 
+    /**
+     * 获取
+     * @param key
+     * @return
+     */
     public String get(String key) {
         return cache.getIfPresent(key);
+    }
+
+    /**
+     * 清空
+     * @param key
+     */
+    public void invalidate(String key){
+        cache.invalidate(key);
     }
 
     /**
@@ -32,6 +51,8 @@ public class CacheConfig {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void clearExpired() {
-        cache.cleanUp();
+        if (cache != null){
+            cache.cleanUp();
+        }
     }
 }
