@@ -1,4 +1,4 @@
-# ems-admin-boot
+# EMSADMIN
 
 #### 介绍
 ems-admin(easy manage system)是一套极简的后台管理系统，
