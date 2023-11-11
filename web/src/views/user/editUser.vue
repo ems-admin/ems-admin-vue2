@@ -1,6 +1,9 @@
 <template>
   <el-dialog :title="title" :visible.sync="visible" :close-on-click-modal="false" @opened="openFun">
     <el-form :model="userForm" :rules="rules" ref="userRef" label-width="120px">
+      <el-form-item v-show="false" prop="id">
+        <el-input v-model="userForm.id"></el-input>
+      </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="userForm.username" placeholder="请输入用户名"></el-input>
       </el-form-item>

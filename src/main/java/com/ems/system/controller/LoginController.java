@@ -84,7 +84,6 @@ public class LoginController extends ResultUtil {
 
             return success(true, new JwtUser(token, refreshToken, userDto));
         } catch (BadRequestException e) {
-            e.printStackTrace();
             return fail(false, e.getMsg());
         }
     }
@@ -103,7 +102,6 @@ public class LoginController extends ResultUtil {
             userService.editUser(userDto);
             return success(true, "注册成功");
         } catch (BadRequestException e) {
-            e.printStackTrace();
             return fail(false, e.getMsg());
         }
     }
@@ -139,7 +137,6 @@ public class LoginController extends ResultUtil {
                 }
             }
         } catch (BadRequestException e) {
-            e.printStackTrace();
             return fail(false, e.getMsg());
         }
         return fail(false, "请重新登录");
@@ -172,7 +169,6 @@ public class LoginController extends ResultUtil {
             }};
             return ResponseEntity.ok(imgResult);
         } catch (BadRequestException e) {
-            e.printStackTrace();
             return fail(false, e.getMsg());
         }
     }
