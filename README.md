@@ -14,7 +14,7 @@ JWT、Vue2.6、element-ui进行开发，
 [![GitHub stars](https://img.shields.io/github/stars/ems-admin/ems-vue2.svg?style=social&label=Stars)](https://github.com/ems-admin/ems-vue2)
 [![GitHub forks](https://img.shields.io/github/forks/ems-admin/ems-vue2.svg?style=social&label=Fork)](https://github.com/ems-admin/ems-vue2)
 
-[ems-admin演示站点](http://ems.facebook47.cn/)
+[ems-admin演示站点](http://ems.fullpx.com/)
 
 #### 支持功能
 
